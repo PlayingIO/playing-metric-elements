@@ -1,11 +1,11 @@
 <!-- DRAWER -->
-<mostly-slot-content name="playMetricsMenuItem" slot="PLAY_MENU" order="10">
+<mostly-slot-content name="playMetricMenuItem" slot="PLAY_MENU" order="10">
   <template>
-    <mostly-menu-item name="metrics" label="app.play.metrics" route="page:play"></mostly-menu-item>
+    <mostly-menu-item name="metric-management" label="play.metric.heading" route="play:metric-management"></mostly-menu-item>
   </template>
 </mostly-slot-content>
-<mostly-slot-content name="adminAuditPage" slot="ADMINISTRATION_PAGES">
+<mostly-slot-content name="playMetricPage" slot="PLAY_PAGES">
   <template>
-    <playing-metrics name="metrics" id="metrics"></playing-metrics>
+    <playing-metric-managment-page name="metric-management" id="metric-management"></playing-metric-managment-page>
   </template>
 </mostly-slot-content>
