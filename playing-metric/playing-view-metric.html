@@ -1,0 +1,46 @@
+<!--
+An element for displaying metric data, which is dynamically loaded by `playing-metric-group-management`.
+This element can be overridden with custom fields.
+
+Example:
+
+    <playing-edit-metric metric=[[metric]] new></playing-edit-metric>
+
+@group Playing Elements
+@element playing-view-metric
+-->
+<dom-module id="playing-view-metric">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div class="layout horizontal">
+      <div class="layout vertical flex">
+        <label>[[i18n('viewUser.email')]]</label>
+        <span>[[metric.email]]</span>
+      </div>
+      <div class="layout vertical flex">
+        <label>[[i18n('viewUser.company')]]</label>
+        <span>[[metric.company]]</span>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-view-metric',
+      behaviors: [Mostly.I18nBehavior],
+      properties: {
+        /**
+         * The metric object to be displayed.
+         */
+        metric: {
+          type: Object,
+          value: {}
+        }
+      }
+    });
+  </script>
+</dom-module>

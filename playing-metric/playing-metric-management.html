@@ -1,0 +1,281 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../iron-pages/iron-pages.html">
+<link rel="import" href="../../iron-form/iron-form.html">
+
+<link rel="import" href="../../paper-card/paper-card.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
+<link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../paper-item/paper-icon-item.html">
+<link rel="import" href="../../paper-toast/paper-toast.html">
+
+<link rel="import" href="../../iron-input/iron-input.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+<link rel="import" href="../../iron-icons/social-icons.html">
+
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+
+<link rel="import" href="../playing-metric/playing-create-metric.html">
+<link rel="import" href="../playing-metric/playing-metric-search.html">
+
+<!--
+An element for managing metrics in Playing game services.
+@group Playing UI Elements
+@element playing-metric-management
+-->
+<dom-module id="playing-metric-management">
+  <template>
+    <style include="iron-flex iron-flex-alignment mostly-styles">
+      :host {
+        display: block;
+        position: relative;
+        @apply --layout-flex;
+      }
+
+      #createDropdown {
+        position: absolute;
+        right: 0;
+        padding: 0;
+        top: 15px;
+      }
+
+      paper-menu-button {
+        width: 130px;
+        height: 48px;
+        margin-bottom: 16px;
+      }
+
+      paper-button {
+        width: 100%;
+      }
+
+      paper-button iron-icon {
+        padding-right: 8px;
+      }
+
+      paper-listbox {
+        width: 130px;
+        outline: none;
+      }
+
+      paper-listbox paper-icon-item iron-icon {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      paper-listbox paper-icon-item:hover {
+        background: var(--mostly-container-hover, #fafafa);
+        cursor: pointer;
+      }
+
+      paper-card {
+        @apply --mostly-card;
+      }
+    </style>
+
+    <mostly-connection user="{{_currentUser}}"></mostly-connection>
+
+    <mostly-page>
+      <div slot="header">
+        <span class="flex">[[i18n('play.metric.heading')]]</span>
+      </div>
+      <paper-toast id="toast"></paper-toast>
+      <iron-pages selected="[[page]]" attr-for-selected="name">
+        <section name="search">
+          <div class="horizontal layout center">
+            <template is="dom-if" if="[[_canCreateMetric(readonly, _currentUser)]]">
+              <div class="flex">
+                <paper-menu-button no-animations id="createDropdown" no-overlap
+                        horizontal-align="right" vertical-align="top" vertical-offset="-4">
+                  <paper-button noink class="primary" id="createButton" slot="dropdown-trigger">
+                    <iron-icon icon="mostly:add"></iron-icon>
+                    <div>[[i18n('play.metric.new')]]</div>
+                  </paper-button>
+                  <paper-listbox no-animation id="menu" selectable="item" slot="dropdown-content">
+                    <paper-icon-item name="point" on-tap="_createPoint">
+                      <iron-icon icon="mostly:user" slot="item-icon"></iron-icon>
+                      <span>[[i18n('play.metric.new.point')]]</span>
+                    </paper-icon-item>
+                    <paper-icon-item name="set" on-tap="_createSet">
+                      <iron-icon icon="mostly:user" slot="item-icon"></iron-icon>
+                      <span>[[i18n('play.metric.new.set')]]</span>
+                    </paper-icon-item>
+                    <paper-icon-item name="state" on-tap="_createState">
+                      <iron-icon icon="mostly:user" slot="item-icon"></iron-icon>
+                      <span>[[i18n('play.metric.new.state')]]</span>
+                    </paper-icon-item>
+                    <paper-icon-item name="compound" on-tap="_createCompound">
+                      <iron-icon icon="mostly:user" slot="item-icon"></iron-icon>
+                      <span>[[i18n('play.metric.new.compound')]]</span>
+                    </paper-icon-item>
+                  </paper-listbox>
+                </paper-menu-button>
+              </div>
+            </template>
+          </div>
+          <playing-metric-search></playing-metric-search>
+        </section>
+
+        <section name="create-metric">
+          <paper-card>
+            <playing-create-metric readonly$="[[readonly]]"></playing-create-metric>
+          </paper-card>
+        </section>
+
+        <section name="manage-point">
+          <playing-metric-point-management
+                  username="[[selectedMetric]]"
+                  readonly$="[[readonly]]"></playing-metric-point-management>
+        </section>
+
+        <section name="manage-set">
+          <playing-metric-set-management
+                  username="[[selectedMetric]]"
+                  readonly$="[[readonly]]"></playing-metric-point-management>
+        </section>
+
+        <section name="manage-state">
+          <playing-metric-state-management
+                  username="[[selectedMetric]]"
+                  readonly$="[[readonly]]"></playing-metric-state-management>
+        </section>
+
+        <section name="manage-compound">
+          <playing-metric-compound-management
+                  username="[[selectedMetric]]"
+                  readonly$="[[readonly]]"></playing-metric-compound-management>
+        </section>
+      </iron-pages>
+    </mostly-page>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-metric-management',
+
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
+
+      properties: {
+        /**
+         * The metric-management page to be displayed.
+         */
+        page: {
+          type: String,
+          value: 'search',
+          notify: true
+        },
+
+        /**
+         * Selected metric id.
+         */
+        selectedMetric: String,
+
+        /**
+         * True if currently in read only mode.
+         */
+        readonly: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+
+        _currentUser: {
+          type: Object
+        }
+      },
+
+      listeners: {
+        'goHome': '_goSearch',
+        'playing-metric-created': '_toast'
+      },
+
+      /**
+       * Go to the 'search' page.
+       */
+      _goSearch: function() {
+        //this.selectedMetric = null;
+        //this.$$('playing-metric-search')._searchTermChanged();
+        this.entity = {};
+        this.page = 'search';
+        //this.navigateTo('play', 'metric-management');
+      },
+
+      /**
+       * Got to the 'create-metric' page.
+       */
+      _createPoint: function() {
+        this.page = 'create-metric';
+      },
+
+      _createSet: function() {
+        this.page = 'create-metric';
+      },
+
+      _createState: function() {
+        this.page = 'create-metric';
+      },
+
+      _createCompound: function() {
+        this.page = 'create-metric';
+      },
+
+      _managePoint: function(e) {
+        this.selectedMetric = null;
+        this.selectedMetric = e.detail.metric;
+        this.page = 'manage-point';
+      },
+
+      _hasAdministrationPermissions: function(user) {
+        return user && (user.isAdministrator || this.isMember(user, 'powerusers'));
+      },
+
+      _canCreateMetric: function(readonly, currentUser) {
+        return !readonly && this._hasAdministrationPermissions(currentUser);
+      },
+
+      /**
+       * Displays a message.
+       */
+      _toast: function(event) {
+        var msg;
+        switch (event.type) {
+          case 'playing-metric-created':
+            msg = 'Metric ' + event.detail.metric + ' created';
+            break;
+        }
+        if (msg) {
+          this.$.toast.text = msg;
+          this.$.toast.open();
+        }
+      },
+
+      ready: function() {
+        // dynamic loading of metric layouts
+        if (!this._isRegistered('playing-view-metric')) {
+          Polymer.Base.importHref(this.resolveUrl('../playing-metric/playing-view-metric.html'));
+        }
+        if (!this._isRegistered('playing-edit-metric')) {
+          Polymer.Base.importHref(this.resolveUrl('../playing-metric/playing-edit-metric.html'));
+        }
+        window.addEventListener('managePoint', (e) => {
+          this._managePoint(e);
+        });
+      },
+
+      /**
+       * Determines whether a custom element is registered
+       */
+      _isRegistered: function(tag) {
+        return document.createElement(tag) instanceof Polymer.Element;
+      }
+
+    });
+  </script>
+</dom-module>

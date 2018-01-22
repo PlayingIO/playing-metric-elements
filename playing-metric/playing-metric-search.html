@@ -1,0 +1,197 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/editor-icons.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../paper-item/paper-icon-item.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-listbox/paper-listbox.html">
+<link rel="import" href="../../paper-menu-button/paper-menu-button.html">
+
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-pagination-controls.html">
+
+<!--
+`playing-metric-search`
+@group Playing Elements
+@element playing-metric-search
+-->
+<dom-module id="playing-metric-search">
+  <template>
+    <style include="iron-flex iron-flex-alignment iron-flex-factors mostly-styles">
+      :host {
+        display: block;
+        @apply --playing-metric-search-layout;
+      }
+
+      .search {
+        width: calc(100% - 11rem);
+      }
+
+      .title {
+        margin: 0 0 .8em;
+        padding: 0;
+      }
+
+      .table-header {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        background-color: var(--mostly-table-header-background, #fafafa);
+        color: var(--mostly-text-default, rgba(0, 0, 0, 0.54));
+        font-weight: 400;
+        min-height: 48px;
+        padding: 0 0 0 12px;
+        border-bottom: 2px solid var(--mostly-border, #eee);
+        box-shadow: 0 -1px 0 rgba(0,0,0,0.2) inset;
+      }
+
+      .table-row {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        padding: 12px 0 12px 12px;
+        border-bottom: 1px solid var(--mostly-border, #eee);
+        cursor: pointer;
+      }
+
+      .table-row:hover {
+        background: var(--mostly-container-hover, #fafafa);
+      }
+
+      .table {
+        border: 1px solid var(--mostly-border, #eee);
+      }
+
+      .counter {
+        margin-right: 2em;
+      }
+
+      h3 iron-icon {
+        width: 1.3em;
+        margin-right: .2rem;
+      }
+
+      .emptyResult {
+        opacity: .5;
+        display: block;
+        font-weight: 300;
+        padding: 1.5em .7em;
+        text-align: center;
+      }
+
+      paper-card {
+        @apply --mostly-card;
+      }
+
+    </style>
+
+    <mostly-resource id="metricSearch" auto
+            path="metrics"
+            response="{{metrics}}"></mostly-resource>
+
+    <paper-card class="search">
+      <paper-input noink autofocus="true" value="{{searchTerm}}" type="search"
+              placeholder="[[i18n('play.metric.search.placeholder')]]">
+        <iron-icon icon="mostly:search" prefix></iron-icon>
+      </paper-input>
+    </paper-card>
+
+    <template is="dom-if" if="[[!_showResults(searchTerm)]]">
+
+      <!-- metrics -->
+      <paper-card name="metrics">
+        <h3 class="title">
+          <iron-icon icon="mostly:user"></iron-icon> [[i18n('play.metric.heading')]]
+        </h3>
+        <div class="table">
+          <div class="table-header">
+            <div class="flex-4">[[i18n('play.metric.field.name')]]</div>
+            <div class="flex-2">[[i18n('play.metric.field.identifier')]]</div>
+            <div class="flex-4">[[i18n('play.metric.field.image')]]</div>
+          </div>
+          <div class="table-rows">
+            <template is="dom-repeat" items="[[metrics.data]]" as="item">
+              <div class="table-row" on-tap="_manageMetric">
+                <div class="flex-4">[[item.name]]</div>
+                <div class="flex-2">[[item.id]]</div>
+                <div class="flex-4">[[item.image]]</div>
+              </div>
+            </template>
+            <template is="dom-if" if=[[_empty(metrics.data)]]>
+              <div class="table-row">
+                <div class="emptyResult">[[i18n('play.metric.search.empty')]]</div>
+              </div>
+            </template>
+          </div>
+        </div>
+        <mostly-pagination-controls page="{{usersCurrentPage}}" number-of-pages="[[metrics.numberOfPages]]"></mostly-pagination-controls>
+      </paper-card>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-metric-search',
+      
+      behaviors: [Mostly.I18nBehavior],
+
+      properties: {
+
+        searchTerm: {
+          type: String,
+          value: '',
+          observer: '_searchTermChanged',
+          notify: true
+        },
+
+        metrics: Object,
+
+        metricsCurrentPage: Number,
+
+        currentPageSize: Number,
+      },
+
+      observers: [
+        '_searchMetrics(metricsCurrentPage)'
+      ],
+
+      _searchTermChanged: function() {
+        if (this.searchTerm !== '') {
+          this.metricsCurrentPage = 1;
+          this.currentPageSize = 10;
+          this._searchMetrics();
+        } else {
+          this.metrics = {};
+        }
+      },
+
+      _searchMetrics: function() {
+        var params = {
+          'name[$like]': this.searchTerm,
+          '$skip': (this.usersCurrentPage - 1) * this.currentPageSize
+        };
+        this.$.metricSearch.params = params;
+      },
+
+      _manageMegric: function(e) {
+        this.fire('manageMetric', { metric: e.model.item.id });
+      },
+
+      _empty: function(entries) {
+        return entries && entries.length === 0;
+      },
+
+      _countMetrics: function(metrics) {
+        var label = ' ' + (metrics.length === 1
+          ? this.i18n('userGroupSearch.member')
+          : this.i18n('userGroupSearch.members'));
+        return metrics.length + label;
+      },
+
+      _showResults: function() {
+        return this.searchTerm.length === 0;
+      }
+
+    });
+  </script>
+</dom-module>
