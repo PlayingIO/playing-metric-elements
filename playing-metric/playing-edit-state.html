@@ -1,0 +1,108 @@
+<!--
+An element for creating and editing state metric data.
+
+Example:
+
+    <playing-edit-state metric=[[metric]] new></playing-edit-state>
+
+@group Playing Elements
+@element playing-edit-state
+-->
+<dom-module id="playing-edit-state">
+  <template>
+    <style include="iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+        width: 100%;
+      }
+
+      .form-rows {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        padding: 12px;
+      }
+
+      .form-cell {
+        @apply --layout-flex;
+        padding-right: 8px;
+      }
+    </style>
+
+    <div class="layout vertical">
+      <paper-input name="description" label="[[i18n('play.metric.field.description')]]"
+            value="{{metric.description}}" maxlength="300"
+            char-counter always-float-label></paper-input>
+    </div>
+
+    <mostly-collapse-button>
+      <div slot="collapse-trigger">Advanced Settings</div>
+      <div slot="collapse-content">
+        <label>[[i18n('documentPage.tags')]]</label>
+        <playing-tag-suggestion document="[[metric]]" allow-new-tags
+                placeholder="[[i18n('documentPage.tags.placeholder')]]">
+        </playing-tag-suggestion>
+
+        <label>[[i18n('play.metric.field.limits')]]</label>
+        <div class="form-rows">
+          <div class="form-cell">
+            <paper-input name="limits.minimum" label="[[i18n('play.metric.field.limits.minimum')]]"
+                  type="number" value="0" always-float-label></paper-input>
+          </div>
+          <div class="form-cell">
+            <paper-input name="limits.maximum" label="[[i18n('play.metric.field.limits.maximum')]]"
+                  type="number" value="" always-float-label></paper-input>
+          </div>
+        </div>
+        <div class="form-rows">
+          <div class="form-cell">
+            <paper-input name="limits.defaults" label="[[i18n('play.metric.field.limits.defaults')]]"
+                  type="number" value="0" always-float-label></paper-input>
+          </div>
+          <div class="form-cell">&nbsp;</div>
+        </div>
+      </div>
+    </mostly-collapse-button>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-edit-state',
+      behaviors: [Mostly.I18nBehavior],
+      properties: {
+        /**
+         * The metric object to be edited or created.
+         */
+        metric: {
+          type: Object,
+          value: {}
+        },
+        /**
+         * If true, a new metric is being created; if false, an already existing metric is being edited.
+         */
+        new: {
+          type: Boolean,
+          value: false
+        },
+
+        resultFormatter: {
+          type: Function,
+          value: function() {
+            return this._resultFormatter.bind(this);
+          }
+        }
+      },
+
+      /**
+       * Resets the form fields to empty values.
+       */
+      resetFields: function() {
+        this.metric = {};
+      },
+
+      _resultFormatter: function(item) {
+        return item.name;
+      }
+    });
+  </script>
+</dom-module>

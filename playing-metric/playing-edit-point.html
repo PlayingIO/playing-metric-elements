@@ -1,15 +1,14 @@
 <!--
-An element for creating and editing metric data, which is dynamically loaded by `playing-metric-management`.
-This element can be overridden with custom fields.
+An element for creating and editing point metric data.
 
 Example:
 
-    <playing-edit-metric metric=[[metric]] new></playing-edit-metric>
+    <playing-edit-point metric=[[metric]] new></playing-edit-point>
 
 @group Playing Elements
-@element playing-edit-metric
+@element playing-edit-point
 -->
-<dom-module id="playing-edit-metric">
+<dom-module id="playing-edit-point">
   <template>
     <style include="iron-flex iron-flex-alignment">
       :host {
@@ -21,6 +20,11 @@ Example:
         @apply --layout-horizontal;
         @apply --layout-center;
         padding: 12px;
+      }
+
+      .form-cell {
+        @apply --layout-flex;
+        padding-right: 8px;
       }
     </style>
 
@@ -40,23 +44,21 @@ Example:
 
         <label>[[i18n('play.metric.field.limits')]]</label>
         <div class="form-rows">
-          <div class="flex">
+          <div class="form-cell">
             <paper-input name="limits.minimum" label="[[i18n('play.metric.field.limits.minimum')]]"
                   type="number" value="0" always-float-label></paper-input>
           </div>
-          <div class="flex-1">&nbsp;</div>
-          <div class="flex">
+          <div class="form-cell">
             <paper-input name="limits.maximum" label="[[i18n('play.metric.field.limits.maximum')]]"
                   type="number" value="" always-float-label></paper-input>
           </div>
         </div>
         <div class="form-rows">
-          <div class="flex">
+          <div class="form-cell">
             <paper-input name="limits.defaults" label="[[i18n('play.metric.field.limits.defaults')]]"
                   type="number" value="0" always-float-label></paper-input>
           </div>
-          <div class="flex-1">&nbsp;</div>
-          <div class="flex">&nbsp;</div>
+          <div class="form-cell">&nbsp;</div>
         </div>
       </div>
     </mostly-collapse-button>
@@ -65,7 +67,7 @@ Example:
 
   <script>
     Polymer({
-      is: 'playing-edit-metric',
+      is: 'playing-edit-point',
       behaviors: [Mostly.I18nBehavior],
       properties: {
         /**

@@ -12,6 +12,11 @@
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
 
+<link rel="import" href="playing-edit-compound.html">
+<link rel="import" href="playing-edit-point.html">
+<link rel="import" href="playing-edit-set.html">
+<link rel="import" href="playing-edit-state.html">
+
 <!--
 `playing-create-metric`
 @group Playing Elements
@@ -77,7 +82,7 @@
 
     <div class="header horizontal layout center">
       <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
-      <h3><iron-icon icon="mostly:metric"></iron-icon>[[i18n('play.metric.heading')]]</h3>
+      <h3><iron-icon icon="mostly:user"></iron-icon>[[_metricHeading(type)]]</h3>
     </div>
 
     <iron-form id="form">
@@ -87,7 +92,21 @@
                 auto-validate required always-float-label>
         </paper-input>
 
-        <playing-edit-metric id="propertyEditor" metric="{{metric}}" new></playing-edit-metric>
+        <template is="dom-if" if="[[_isMetric('point')]]">
+          <playing-edit-point id="propertyEditor" metric="{{metric}}" new></playing-edit-point>
+        </template>
+
+        <template is="dom-if" if="[[_isMetric('set')]]">
+          <playing-edit-set id="propertyEditor" metric="{{metric}}" new></playing-edit-set>
+        </template>
+
+        <template is="dom-if" if="[[_isMetric('state')]]">
+          <playing-edit-state id="propertyEditor" metric="{{metric}}" new></playing-edit-state>
+        </template>
+
+        <template is="dom-if" if="[[_isMetric('compound')]]">
+          <playing-edit-compound id="propertyEditor" metric="{{metric}}" new></playing-edit-compound>
+        </template>
 
         <div class="form-buttons">
           <paper-button noink id="cancelButton" on-tap="_cancel">[[i18n('command.cancel')]]</paper-button>
@@ -109,6 +128,11 @@
       is: 'playing-create-metric',
       behaviors: [Mostly.I18nBehavior],
       properties: {
+        type: {
+          type: String,
+          value: 'point'
+        },
+
         metric: {
           type: Object,
           value: {}
@@ -137,6 +161,14 @@
           event.preventDefault();
           this._create();
         });
+      },
+
+      _isMetric: function(type) {
+        return this.type === type;
+      },
+
+      _metricHeading: function(type) {
+        return this.i18n('play.metric.' + type + '.heading');
       },
 
       _goHome: function() {

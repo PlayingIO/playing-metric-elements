@@ -123,9 +123,27 @@ An element for managing metrics in Playing game services.
           <playing-metric-search></playing-metric-search>
         </section>
 
-        <section name="create-metric">
+        <section name="create-point">
           <paper-card>
-            <playing-create-metric readonly$="[[readonly]]"></playing-create-metric>
+            <playing-create-metric type="point" readonly$="[[readonly]]"></playing-create-metric>
+          </paper-card>
+        </section>
+
+        <section name="create-set">
+          <paper-card>
+            <playing-create-metric type="set" readonly$="[[readonly]]"></playing-create-metric>
+          </paper-card>
+        </section>
+
+        <section name="create-state">
+          <paper-card>
+            <playing-create-metric type="state" readonly$="[[readonly]]"></playing-create-metric>
+          </paper-card>
+        </section>
+
+        <section name="create-compound">
+          <paper-card>
+            <playing-create-metric type="compound" readonly$="[[readonly]]"></playing-create-metric>
           </paper-card>
         </section>
 
@@ -211,19 +229,19 @@ An element for managing metrics in Playing game services.
        * Got to the 'create-metric' page.
        */
       _createPoint: function() {
-        this.page = 'create-metric';
+        this.page = 'create-point';
       },
 
       _createSet: function() {
-        this.page = 'create-metric';
+        this.page = 'create-set';
       },
 
       _createState: function() {
-        this.page = 'create-metric';
+        this.page = 'create-state';
       },
 
       _createCompound: function() {
-        this.page = 'create-metric';
+        this.page = 'create-compound';
       },
 
       _managePoint: function(e) {
@@ -257,13 +275,6 @@ An element for managing metrics in Playing game services.
       },
 
       ready: function() {
-        // dynamic loading of metric layouts
-        if (!this._isRegistered('playing-view-metric')) {
-          Polymer.Base.importHref(this.resolveUrl('../playing-metric/playing-view-metric.html'));
-        }
-        if (!this._isRegistered('playing-edit-metric')) {
-          Polymer.Base.importHref(this.resolveUrl('../playing-metric/playing-edit-metric.html'));
-        }
         window.addEventListener('managePoint', (e) => {
           this._managePoint(e);
         });

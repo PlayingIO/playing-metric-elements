@@ -1,0 +1,598 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../paper-toast/paper-toast.html">
+
+<link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
+<link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-dialog.html">
+<link rel="import" href="../playing-user-group/playing-user-group-permissions-table.html">
+<link rel="import" href="../widgets/playing-user-suggestion.html">
+<link rel="import" href="../widgets/playing-group-tag.html">
+<link rel="import" href="playing-edit-password.html">
+
+<!--
+An element for managing a point metric.
+
+Example:
+
+    <playing-metric-point-management metric-point="Administrator"></playing-metric-point-management>
+
+@group Playing Elements
+@element playing-metric-point-management
+-->
+
+<dom-module id="playing-metric-point-management">
+  <template>
+    <style include="iron-flex iron-flex-alignment iron-flex-factors mostly-styles">
+      :host {
+        display: block;
+      }
+
+      label {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .header {
+        @apply --layout-start;
+      }
+
+      .backButton {
+        color: var(--mostly-button-primary, #00adff);
+      }
+
+      .username {
+        margin: 10px 0 5px 5px;
+      }
+
+      .name {
+        font-weight: normal;
+        margin: 0 0 0 5px;
+      }
+
+      .avatar {
+        margin-top: 10px;
+      }
+
+      .actions {
+        @apply --layout-horizontal;
+        @apply --layout-flex;
+        @apply --layout-center;
+        @apply --layout-end-justified;
+      }
+
+      .actions paper-button {
+        margin-left: 1em;
+      }
+
+      paper-button iron-icon {
+        width: 1.3rem;
+        margin-right: .5rem;
+      }
+
+      .activity-entry:nth-of-type(1) {
+        margin-top: 20px;
+      }
+
+      .activity-entry {
+        margin-top: 15px;
+      }
+
+      .remove {
+        color: red;
+        cursor: pointer;
+        font-size: .8rem;
+        margin-left: 10px;
+        text-decoration: underline;
+      }
+
+      .table {
+        margin-top: 12px;
+      }
+
+      .table-headers {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        background-color: var(--mostly-table-header-background, #fafafa);
+        color: var(--mostly-text-default, rgba(0, 0, 0, 0.54));
+        font-weight: 400;
+        min-height: 48px;
+        padding: 0 0 0 12px;
+        border-bottom: 2px solid var(--mostly-border, #eee);
+        box-shadow: 0 -1px 0 rgba(0,0,0,0.2) inset;
+      }
+
+      .table-row {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        padding: 0 1em;
+        min-height: 48px;
+        border-bottom: 1px solid var(--mostly-border, #eee);
+        background-color: var(--mostly-table-items-background, #fafafa);
+      }
+
+      .table-row:hover {
+        background: var(--mostly-container-hover, #fafafa);
+      }
+
+      .table {
+        border: 1px solid var(--mostly-border, #eee);
+      }
+
+      .table-row:last-of-type {
+        border-bottom: none;
+      }
+
+      .table-headers > div {
+        background-color: var(--mostly-table-header-background,#f8f9fb);
+        font-weight: bold;
+      }
+
+      .table-actions {
+        width: 50px;
+      }
+
+      playing-view-metric {
+        margin: 2em;
+      }
+
+      playing-user-group-permissions-table {
+        margin-top: 1.5em;
+      }
+
+      paper-dialog {
+        min-width: 400px;
+        padding-top: 24px;
+      }
+
+      #errors {
+        color: red;
+        margin-top: 20px;
+      }
+
+      .buttons {
+        @apply --buttons-bar;
+        margin-top: 2em;
+      }
+
+      .confirm {
+        padding: 2em;
+        font-size: 1.1rem;
+      }
+
+      paper-card {
+        @apply --mostly-card;
+      }
+    </style>
+
+    <mostly-connection user="{{_currentUser}}"></mostly-connection>
+
+    <mostly-resource id="request"
+            path="points/[[username]]"
+            schemas='*'></mostly-resource>
+
+    <paper-toast id="toast"></paper-toast>
+
+    <paper-card>
+      <div class="header horizontal layout">
+        <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
+        <iron-icon icon="mostly:user" class="avatar"></iron-icon>
+        <div class="layout vertical">
+          <h3 class="username">[[user.username]]</h3>
+          <h4 class="name">[[user.displayLabel]]</h4>
+        </div>
+
+        <div class="actions">
+
+          <!-- delete -->
+          <template is="dom-if" if="[[_canEdit(readonly, _currentUser, user)]]">
+            <paper-button noink id="deleteUserButton" class="horizontal layout center" on-tap="_toggleDeleteUser">
+              <iron-icon noink icon="mostly:delete"></iron-icon> [[i18n('command.delete')]]
+            </paper-button>
+          </template>
+
+          <!-- change password -->
+          <template is="dom-if" if="[[_canEdit(readonly, _currentUser, user)]]">
+            <paper-button noink id="changePasswordButton" class="primary horizontal layout center" on-tap="_toggleChangePassword">
+              <iron-icon icon="mostly:lock"></iron-icon> [[i18n('command.change.password')]]
+            </paper-button>
+          </template>
+
+          <!-- edit -->
+          <template is="dom-if" if="[[_canEdit(readonly, _currentUser, user)]]">
+            <paper-button noink id="editUserButton" class="primary horizontal layout center" on-tap="_toggleEditUser">
+              <iron-icon icon="mostly:edit"></iron-icon> [[i18n('userManagement.editUser.button')]]
+            </paper-button>
+          </template>
+
+        </div>
+      </div>
+
+      <!-- metric -->
+      <playing-view-metric id="userViewer" metric="[[metric]]"></playing-view-metric>
+
+    </paper-card>
+
+    <!-- groups -->
+    <paper-card>
+      <div class="layout horizontal center">
+        <h3 class="flex">[[i18n('userManagement.groups')]]</h3>
+        <template is="dom-if" if="[[_canEdit(readonly, _currentUser, user)]]">
+          <paper-button noink id="addGroup" class="flex-end" on-tap="_toggleEditGroups">
+            <iron-icon icon="mostly:add"></iron-icon> [[i18n('userManagement.addToGroup.button')]]
+          </paper-button>
+        </template>
+      </div>
+      <div class="layout vertical" hidden$="[[!showEditGroups]]">
+        <playing-user-suggestion id="picker" class="flex"
+                search-type="group"
+                placeholder="[[i18n('userManagement.search.groups')]]"
+                value="{{selectedGroup}}"
+                selected-items="{{selectedGroup}}"
+                result-formatter="[[resultFormatter]]"
+                query-results-filter="[[resultsFilter]]>
+        </playing-user-suggestion>
+        <div id="errors" hidden$="[[!errors]]">[[errors]]</div>
+        <template is="dom-repeat" items="[[activity]]">
+          <div class="activity-entry">
+            [[i18n('userManagement.memberOf.group', user.username)]]
+            <playing-group-tag group="[[item]]"></playing-group-tag>
+            <span class="remove" on-tap="_toggleDialog">[[i18n('userManagement.group.remove')]]</span>
+          </div>
+        </template>
+      </div>
+      <div class="table">
+        <div class="table-headers">
+          <div class="flex">[[i18n('userManagement.name')]]</div>
+          <div class="flex-4">[[i18n('userManagement.identifier')]]</div>
+          <div class="table-actions">&nbsp;</div>
+        </div>
+        <template is="dom-if" if=[[!empty]]>
+          <template is="dom-repeat" items="[[user.groups]]">
+            <div class="table-row">
+              <div class="flex">
+                <playing-group-tag group="[[item]]"></playing-group-tag>
+              </div>
+              <div class="flex-4">[[item.groupname]]</div>
+              <div class="table-actions">
+                <template is="dom-if" if="[[_canEdit(readonly, _currentUser, user)]]">
+                  <paper-icon-button icon="mostly:remove"
+                          title="[[i18n('userManagement.removeFrom.group', item.label)]]"
+                          on-tap="_toggleDialog">
+                  </paper-icon-button>
+                </template>
+              </div>
+            </div>
+          </template>
+        </template>
+        <template is="dom-if" if=[[empty]]>
+          <div class="table-row">
+            <div>[[i18n('userManagement.noSearchResults')]]</div>
+          </div>
+        </template>
+      </div>
+    </paper-card>
+
+    <!-- local permissions -->
+    <paper-card>
+    <playing-user-group-permissions-table
+            label="[[i18n('userManagement.localPermissions.heading')]]"
+            entity="[[username]]" readonly="[[readonly]]">
+    </playing-user-group-permissions-table>
+    </paper-card>
+
+    <!-- group permissions -->
+    <template is="dom-repeat" items="[[user.groups]]">
+      <paper-card>
+        <playing-user-group-permissions-table
+                label="[[i18n('userManagement.entityPermissions', item.groupname)]]"
+                entity="[[item.groupname]]" readonly="[[readonly]]">
+        </playing-user-group-permissions-table>
+      </paper-card>
+    </template>
+
+    <mostly-dialog id="dialog" with-backdrop>
+      <h2>[[i18n('userManagement.removeUserFromGroup.confirm', user.username, _removedGroup.groupname)]]</h2>
+      <div class="buttons horizontal end-justified layout">
+        <div class="flex start-justified">
+          <paper-button noink dialog-dismiss>[[i18n('label.no')]]</paper-button>
+        </div>
+        <paper-button noink dialog-confirm class="primary" on-tap="_remove">[[i18n('label.yes')]]</paper-button>
+      </div>
+    </mostly-dialog>
+
+    <mostly-dialog id="deleteUserDialog" with-backdrop>
+      <h2>[[i18n('userManagement.delete.user.confirm')]]</h2>
+      <div class="buttons horizontal end-justified layout">
+        <div class="flex start-justified">
+          <paper-button noink dialog-dismiss>[[i18n('label.no')]]</paper-button>
+        </div>
+        <paper-button noink class="primary" on-tap="_deleteUser">[[i18n('label.yes')]]</paper-button>
+      </div>
+    </mostly-dialog>
+
+    <mostly-dialog id="changePasswordDialog" with-backdrop>
+      <h2>[[i18n('command.change.password')]]</h2>
+      <iron-form id="changePasswordForm">
+        <form class="vertical layout">
+          <playing-edit-password required id="passwordEditor"></playing-edit-password>
+        </form>
+      </iron-form>
+      <div class="buttons horizontal end-justified layout">
+        <div class="flex start-justified">
+          <paper-button noink dialog-dismiss>[[i18n('command.cancel')]]</paper-button>
+        </div>
+        <paper-button noink class="primary" on-tap="_submitChangePassword">
+          [[i18n('command.save.changes')]]
+        </paper-button>
+      </div>
+    </mostly-dialog>
+
+    <mostly-dialog id="editUserDialog" with-backdrop>
+      <h2>[[i18n('userManagement.editUser.heading')]]</h2>
+      <iron-form id="editUserForm">
+        <form class="vertical layout">
+          <paper-input label="[[i18n('userManagement.username')]]" value="[[user.username]]"
+                  always-float-label readonly required></paper-input>
+          <playing-edit-user id="userEditor"></playing-edit-user>
+        </form>
+      </iron-form>
+      <div class="buttons horizontal end-justified layout">
+        <div class="flex start-justified">
+          <paper-button noink dialog-dismiss>[[i18n('command.cancel')]]</paper-button>
+        </div>
+        <paper-button noink class="primary" on-tap="_submitEditUser">
+          [[i18n('command.save.changes')]]
+        </paper-button>
+      </div>
+    </mostly-dialog>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'playing-metric-point-management',
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
+      properties: {
+        username: {
+          type: String,
+          observer: '_fetch'
+        },
+
+        metric: Object,
+
+        selectedGroup: {
+          type: Object,
+          observer: '_groupSelected'
+        },
+
+        activity: {
+          type: Array,
+          value: []
+        },
+
+        resultsFilter: {
+          type: Function,
+          value: function() {
+            return this._resultsFilter.bind(this);
+          }
+        },
+
+        resultFormatter: {
+          type: Function,
+          value: function() {
+            return this._resultFormatter.bind(this);
+          }
+        },
+
+        showEditGroups: {
+          type: Boolean,
+          value: false
+        },
+
+        empty: Boolean,
+
+        _removedGroup: Object,
+
+        readonly: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+
+        errors: {
+          type: String,
+          reflectToAttribute: true
+        },
+
+        _currentUser: {
+          type: Object
+        }
+      },
+
+      observers: [
+        '_userRemovedFromGroup(user.groups)'
+      ],
+
+      /**
+       * Fired when a user is deleted.
+       *
+       * @event playing-user-deleted
+       */
+      ready: function() {
+        this.$.editUserForm.addEventListener('iron-form-presubmit', (event) => {
+          event.preventDefault();
+          this._saveUser();
+        });
+        this.$.changePasswordForm.addEventListener('iron-form-presubmit', (event) => {
+          event.preventDefault();
+          this._savePassword();
+        });
+      },
+
+      _fetch: function() {
+        if (this.username) {
+          this.$.request.get().then((response) => {
+            delete response.data.password;
+            this.user = response.data;
+            this.activity = [];
+            this.showEditGroups = false;
+            this.selectedGroup = null;
+          });
+        }
+      },
+
+      _isAdministrator: function(user) {
+        return user && user.isAdministrator;
+      },
+
+      _hasAdministrationPermissions: function(currentUser) {
+        return currentUser && (currentUser.isAdministrator ||
+          (this.isMember(currentUser, 'powerusers') && !this.user.isAdministrator));
+      },
+
+      _canEdit: function(readonly, currentUser, user) {
+        return !readonly && this.user && currentUser && (this._hasAdministrationPermissions(currentUser) ||
+          this._isSameUsername(currentUser.username, user.username));
+      },
+
+      _isSameUsername: function(username1, username2) {
+        return username1 && username2 && username1 === username2;
+      },
+
+      _groupSelected: function() {
+        if (this.selectedGroup) {
+          if (!this._isAdministrator(this._currentUser) && this.selectedGroup.groupname === 'administrators') {
+            this.errors = this.i18n('userManagement.errorAdministratorsGroup');
+            this.selectedGroup = null;
+            return;
+          }
+          var group = {
+            'id': this.selectedGroup.id,
+            'groupname': this.selectedGroup.groupname,
+            'label': this.selectedGroup.label
+          };
+          this.push('activity', group);
+          this.$.request.path = 'users/' + this.user.id + '/addGroup';
+          this.$.request.data = { group: this.selectedGroup.id };
+          this.$.request.patch().then((response) => {
+            this.user = response.data;
+            this._toast(this.i18n('userManagement.addedUserToGroup', this.user.username, group.groupname));
+          });
+        }
+        this.selectedGroup = null;
+      },
+
+      _remove: function() {
+        var group = this._removedGroup;
+        this.$.request.path = 'users/' + this.user.id + '/removeGroup';
+        this.$.request.data = { group: group.id };
+        return this.$.request.patch().then(() => {
+          this._removeRecent(group.id);
+          this._removeFromGroup(group.id);
+          this._toast(this.i18n('userManagement.removedUserFromGroup', this.user.username, group.groupname));
+        });
+      },
+
+      _removeRecent: function(group) {
+        this.activity = this.activity.filter(it => it.id !== group);
+      },
+
+      _removeFromGroup: function(group) {
+        this.set('user.groups', this.user.groups.filter(it => it.id !== group));
+      },
+
+      _userRemovedFromGroup: function() {
+        this.empty = this.user.groups && this.user.groups.length === 0;
+      },
+
+      _toggleEditGroups: function() {
+        this.showEditGroups = !this.showEditGroups;
+      },
+
+      _toggleDialog: function(e) {
+        this._removedGroup = e.model.item;
+        this.$.dialog.toggle();
+      },
+
+      _toggleChangePassword: function() {
+        this.$.changePasswordDialog.toggle();
+      },
+
+      _submitChangePassword: function() {
+        this.$.changePasswordForm.submit();
+      },
+
+      _savePassword: function() {
+        this.$.changePasswordDialog.toggle();
+        this.$.editRequest.data = JSON.parse(JSON.stringify(this.user));
+        this.$.editRequest.data.password = this.$.passwordEditor.password;
+        this.$.editRequest.patch().then((response) => {
+          this.user = response.data;
+          this._toast(this.i18n('userManagement.password.changed'));
+          if (!!this.$.passwordEditor.resetFields) {
+            this.$.passwordEditor.resetFields();
+          }
+        });
+      },
+
+      _toggleEditUser: function() {
+        this.$.userEditor.user = JSON.parse(JSON.stringify(this.user));
+        this.$.editUserDialog.toggle();
+      },
+
+      _submitEditUser: function() {
+        this.$.editUserForm.submit();
+      },
+
+      _saveUser: function() {
+        this.$.editUserDialog.toggle();
+        var editedUser = JSON.parse(JSON.stringify(this.user));
+        editedUser = this.$.userEditor.user;
+        this.$.editRequest.data = editedUser;
+        this.$.editRequest.patch().then((response) => {
+          this.user = response.data;
+          this._toast(this.i18n('userManagement.user.updated'));
+        });
+      },
+
+      _toggleDeleteUser: function() {
+        this.$.deleteUserDialog.toggle();
+      },
+
+      _deleteUser: function() {
+        this.$.deleteUserDialog.toggle();
+        this.$.editRequest.remove().then((response) => {
+          this.fire('playing-user-deleted', this.user);
+          this._goHome();
+        });
+      },
+
+      _goHome: function() {
+        this.fire('goHome');
+      },
+
+      _resultsFilter: function(entry) {
+        for (var i = 0; i < this.user.groups.length; i++) {
+          if (entry.id === this.user.groups[i].id) {
+            return false;
+          }
+        }
+        return true;
+      },
+
+      _resultFormatter: function(item) {
+        return item.displayLabel + ' (' + (item.groupname || item.username) + ')';
+      },
+
+      _toast: function(msg) {
+        this.$.toast.text = msg;
+        this.$.toast.open();
+      }
+    });
+  </script>
+</dom-module>
