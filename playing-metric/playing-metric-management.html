@@ -160,7 +160,7 @@ An element for managing metrics in Playing game services.
     Polymer({
       is: 'playing-metric-management',
 
-      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
+      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior, Mostly.RoutingBehavior],
 
       properties: {
         /**
@@ -200,11 +200,11 @@ An element for managing metrics in Playing game services.
        * Go to the 'search' page.
        */
       _goSearch: function() {
-        //this.selectedMetric = null;
-        //this.$$('playing-metric-search')._searchTermChanged();
+        this.selectedMetric = null;
+        this.$$('playing-metric-search')._searchTermChanged();
         this.entity = {};
         this.page = 'search';
-        //this.navigateTo('play', 'metric-management');
+        this.navigateTo('play', 'metric-management');
       },
 
       /**

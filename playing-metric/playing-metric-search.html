@@ -96,37 +96,35 @@
       </paper-input>
     </paper-card>
 
-    <template is="dom-if" if="[[!_showResults(searchTerm)]]">
-
-      <!-- metrics -->
-      <paper-card name="metrics">
-        <h3 class="title">
-          <iron-icon icon="mostly:user"></iron-icon> [[i18n('play.metric.heading')]]
-        </h3>
-        <div class="table">
-          <div class="table-header">
-            <div class="flex-4">[[i18n('play.metric.field.name')]]</div>
-            <div class="flex-2">[[i18n('play.metric.field.identifier')]]</div>
-            <div class="flex-4">[[i18n('play.metric.field.image')]]</div>
-          </div>
-          <div class="table-rows">
-            <template is="dom-repeat" items="[[metrics.data]]" as="item">
-              <div class="table-row" on-tap="_manageMetric">
-                <div class="flex-4">[[item.name]]</div>
-                <div class="flex-2">[[item.id]]</div>
-                <div class="flex-4">[[item.image]]</div>
-              </div>
-            </template>
-            <template is="dom-if" if=[[_empty(metrics.data)]]>
-              <div class="table-row">
-                <div class="emptyResult">[[i18n('play.metric.search.empty')]]</div>
-              </div>
-            </template>
-          </div>
+    <!-- metrics -->
+    <paper-card name="metrics">
+      <h3 class="title">
+        <iron-icon icon="mostly:user"></iron-icon> [[i18n('play.metric.heading')]]
+      </h3>
+      <div class="table">
+        <div class="table-header">
+          <div class="flex-1">[[i18n('play.metric.field.image')]]</div>
+          <div class="flex-4">[[i18n('play.metric.field.name')]]</div>
+          <div class="flex-4">[[i18n('play.metric.field.description')]]</div>
         </div>
-        <mostly-pagination-controls page="{{usersCurrentPage}}" number-of-pages="[[metrics.numberOfPages]]"></mostly-pagination-controls>
-      </paper-card>
-    </template>
+        <div class="table-rows">
+          <template is="dom-repeat" items="[[metrics.data]]" as="item">
+            <div class="table-row" on-tap="_manageMetric">
+              <div class="flex-1">[[item.image]]</div>
+              <div class="flex-4">[[item.name]]</div>
+              <div class="flex-4">[[item.description]]</div>
+            </div>
+          </template>
+          <template is="dom-if" if=[[_empty(metrics.data)]]>
+            <div class="table-row">
+              <div class="emptyResult">[[i18n('play.metric.search.empty')]]</div>
+            </div>
+          </template>
+        </div>
+      </div>
+      <mostly-pagination-controls page="{{metricsCurrentPage}}" number-of-pages="[[metrics.numberOfPages]]"></mostly-pagination-controls>
+    </paper-card>
+
   </template>
 
   <script>
@@ -146,9 +144,15 @@
 
         metrics: Object,
 
-        metricsCurrentPage: Number,
+        metricsCurrentPage: {
+          type: 'Number',
+          value: 1
+        },
 
-        currentPageSize: Number,
+        currentPageSize: {
+          type: 'Number',
+          value: 10
+        }
       },
 
       observers: [
@@ -156,40 +160,27 @@
       ],
 
       _searchTermChanged: function() {
-        if (this.searchTerm !== '') {
-          this.metricsCurrentPage = 1;
-          this.currentPageSize = 10;
-          this._searchMetrics();
-        } else {
-          this.metrics = {};
-        }
+        this.metricsCurrentPage = 1;
+        this.currentPageSize = 10;
+        this._searchMetrics();
       },
 
       _searchMetrics: function() {
         var params = {
-          'name[$like]': this.searchTerm,
-          '$skip': (this.usersCurrentPage - 1) * this.currentPageSize
+          '$skip': (this.metricsCurrentPage - 1) * this.currentPageSize
         };
+        if (this.searchTerm) {
+          params['name[$like]'] = this.searchTerm;
+        }
         this.$.metricSearch.params = params;
       },
 
-      _manageMegric: function(e) {
+      _manageMetric: function(e) {
         this.fire('manageMetric', { metric: e.model.item.id });
       },
 
       _empty: function(entries) {
         return entries && entries.length === 0;
-      },
-
-      _countMetrics: function(metrics) {
-        var label = ' ' + (metrics.length === 1
-          ? this.i18n('userGroupSearch.member')
-          : this.i18n('userGroupSearch.members'));
-        return metrics.length + label;
-      },
-
-      _showResults: function() {
-        return this.searchTerm.length === 0;
       }
 
     });
