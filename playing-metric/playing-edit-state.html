@@ -75,7 +75,7 @@ Example:
          */
         metric: {
           type: Object,
-          value: {}
+          value: { constraints: {} }
         },
         /**
          * If true, a new metric is being created; if false, an already existing metric is being edited.
@@ -97,7 +97,7 @@ Example:
        * Resets the form fields to empty values.
        */
       resetFields: function() {
-        this.metric = {};
+        this.metric = { constraints: {} };
       },
 
       _resultFormatter: function(item) {
