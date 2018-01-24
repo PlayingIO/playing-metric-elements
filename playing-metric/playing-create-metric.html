@@ -135,7 +135,7 @@
 
         metric: {
           type: Object,
-          value: {}
+          value: { constraints: {} }
         },
 
         errors: {
@@ -206,6 +206,7 @@
       },
 
       _doCreate: function(metric) {
+        metric.type = this.type;
         this.$.request.data = metric;
         return this.$.request.post().then((response) => {
           this.fire('playing-metric-created', response.data);

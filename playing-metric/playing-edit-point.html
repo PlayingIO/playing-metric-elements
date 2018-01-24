@@ -42,21 +42,21 @@ Example:
                 placeholder="[[i18n('documentPage.tags.placeholder')]]">
         </playing-tag-suggestion>
 
-        <label>[[i18n('play.metric.field.limits')]]</label>
+        <label>[[i18n('play.metric.field.constraints')]]</label>
         <div class="form-rows">
           <div class="form-cell">
-            <paper-input name="limits.minimum" label="[[i18n('play.metric.field.limits.minimum')]]"
-                  type="number" value="0" always-float-label></paper-input>
+            <paper-input name="constraints.minimum" label="[[i18n('play.metric.field.constraints.minimum')]]"
+                  type="number" value="{{metric.constraints.minimum}}" always-float-label></paper-input>
           </div>
           <div class="form-cell">
-            <paper-input name="limits.maximum" label="[[i18n('play.metric.field.limits.maximum')]]"
-                  type="number" value="" always-float-label></paper-input>
+            <paper-input name="constraints.maximum" label="[[i18n('play.metric.field.constraints.maximum')]]"
+                  type="number" value="{{metric.constraints.maximum}}" always-float-label></paper-input>
           </div>
         </div>
         <div class="form-rows">
           <div class="form-cell">
-            <paper-input name="limits.defaults" label="[[i18n('play.metric.field.limits.defaults')]]"
-                  type="number" value="0" always-float-label></paper-input>
+            <paper-input name="constraints.default" label="[[i18n('play.metric.field.constraints.default')]]"
+                  type="number" value="{{metric.constraints.default}}" always-float-label></paper-input>
           </div>
           <div class="form-cell">&nbsp;</div>
         </div>
