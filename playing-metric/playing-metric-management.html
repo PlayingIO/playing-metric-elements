@@ -149,25 +149,25 @@ An element for managing metrics in Playing game services.
 
         <section name="manage-point">
           <playing-manage-point
-                  metric="[[selectedMetric]]"
+                  metric="[[selectedMetric.id]]"
                   readonly$="[[readonly]]" refetch></playing-manage-point>
         </section>
 
         <section name="manage-set">
           <playing-manage-set
-                  metric="[[selectedMetric]]"
+                  metric="[[selectedMetric.id]]"
                   readonly$="[[readonly]]" refetch></playing-manage-set>
         </section>
 
         <section name="manage-state">
           <playing-manage-state-management
-                  metric="[[selectedMetric]]"
+                  metric="[[selectedMetric.id]]"
                   readonly$="[[readonly]]" refetch></playing-manage-state>
         </section>
 
         <section name="manage-compound">
           <playing-manage-compound
-                  metric="[[selectedMetric]]"
+                  metric="[[selectedMetric.id]]"
                   readonly$="[[readonly]]" refetch></playing-manage-compound>
         </section>
       </iron-pages>

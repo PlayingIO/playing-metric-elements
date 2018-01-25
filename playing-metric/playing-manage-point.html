@@ -151,7 +151,7 @@ Example:
     </style>
 
     <mostly-resource id="request"
-            path="points/[[metric.id]]"
+            path="points/[[_metricId(metric)]]"
             schemas='*'></mostly-resource>
 
     <paper-toast id="toast"></paper-toast>
@@ -219,7 +219,10 @@ Example:
       is: 'playing-manage-point',
       behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
       properties: {
-        metric: Object,
+        metric: {
+          type: Object,
+          observer: '_fetch'
+        },
 
         empty: Boolean,
 
@@ -243,11 +246,15 @@ Example:
       },
 
       _fetch: function() {
-        if (this.metric) {
+        if (typeof this.metric === 'string') {
           this.$.request.get().then((response) => {
             this.metric = response.data;
           });
         }
+      },
+
+      _metricId: function(metric) {
+        return (metric && metric.id) || metric;
       },
 
       _toggleDialog: function(e) {
