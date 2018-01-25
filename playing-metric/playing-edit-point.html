@@ -32,6 +32,9 @@ Example:
       <paper-input name="description" label="[[i18n('play.metric.field.description')]]"
             value="{{metric.description}}" maxlength="300"
             char-counter always-float-label></paper-input>
+      <playing-dropzone name="content"
+              label="[[i18n('play.metric.field.image')]]"
+              document="{{metric}}" xpath="image"></playing-dropzone>
     </div>
 
     <mostly-collapse-button>
@@ -75,7 +78,7 @@ Example:
          */
         metric: {
           type: Object,
-          value: { constraints: {} }
+          value: {}
         },
         /**
          * If true, a new metric is being created; if false, an already existing metric is being edited.
@@ -91,6 +94,10 @@ Example:
             return this._resultFormatter.bind(this);
           }
         }
+      },
+
+      ready: function() {
+        this.metric.constraints = this.metric.constraints || {};
       },
 
       /**

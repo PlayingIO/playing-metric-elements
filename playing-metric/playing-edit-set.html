@@ -37,40 +37,53 @@ Example:
       <paper-input name="description" label="[[i18n('play.metric.field.description')]]"
             value="{{metric.description}}" maxlength="300"
             char-counter always-float-label></paper-input>
+      <playing-dropzone name="content"
+              label="[[i18n('play.metric.field.image')]]"
+              document="{{metric}}" xpath="image"></playing-dropzone>
     </div>
 
     <div class="layout vertical">
       <label>[[i18n('play.metric.set.constraints.items')]]</label>
       <template is="dom-repeat" items="{{metric.constraints.items}}" as="item">
         <div class="form-rows">
-          <div class="form-cell">
-            <paper-input name="itemName" label="[[i18n('play.metric.field.name')]]"
-                    value="{{item.name}}" minlength="3" maxlength="20"
-                    auto-validate required always-float-label></paper-input>
-          </div>
-          <div class="form-cell">
-            <paper-input name="itemMaximum" label="[[i18n('play.metric.set.constraints.items.maximum')]]"
-                    type="number" value="{{item.maximum}}"
-                    required always-float-label></paper-input>
-          </div>
           <div class="flex-1">
-            <iron-icon icon="mostly:remove" class="remove" on-tap="_removeFilter"></iron-icon>
+            <playing-dropzone name="content"
+                    label="[[i18n('play.metric.set.constraints.items.image')]]"
+                    document="{{item}}" xpath="image"></playing-dropzone>
           </div>
-        </div>
-        <div class="form-rows">
           <div class="form-cell">
-            <paper-checkbox name="itemHidden"
-                    value="{{item.hidden}}" noink>[[i18n('play.metric.set.constraints.items.hidden')]]</paper-checkbox>
+            <div class="form-rows">
+              <div class="form-cell">
+                <paper-input name="itemName" label="[[i18n('play.metric.field.name')]]"
+                        value="{{item.name}}" minlength="3" maxlength="20"
+                        auto-validate required always-float-label></paper-input>
+              </div>
+              <div class="form-cell">
+                <paper-input name="itemMaximum" label="[[i18n('play.metric.set.constraints.items.maximum')]]"
+                        type="number" value="{{item.maximum}}"
+                        required always-float-label></paper-input>
+              </div>
+              <div class="flex-1">
+                <iron-icon icon="mostly:remove" class="remove" data-index="[[index]]" on-tap="_removeItem"></iron-icon>
+              </div>
+            </div>
+            <div class="form-rows">
+              <div class="form-cell">
+                <paper-checkbox name="itemHidden"
+                        value="{{item.hidden}}" noink>[[i18n('play.metric.set.constraints.items.hidden')]]</paper-checkbox>
+              </div>
+              <div class="flex-1">&nbsp;</div>
+            </div>
+            <div class="form-rows">
+              <div class="flex-1">&nbsp;</div>
+              <div class="form-cell">
+                <paper-input name="itemDescription" label="[[i18n('play.metric.field.description')]]"
+                        value="{{item.description}}" maxlength="300"
+                        always-float-label></paper-input>
+              </div>
+              <div class="flex-1">&nbsp;</div>
+            </div>
           </div>
-          <div class="flex-1">&nbsp;</div>
-        </div>
-        <div class="form-rows">
-          <div class="form-cell">
-            <paper-input name="itemDescription" label="[[i18n('play.metric.field.description')]]"
-                    value="{{item.description}}" maxlength="300"
-                    always-float-label></paper-input>
-          </div>
-          <div class="flex-1">&nbsp;</div>
         </div>
       </template>
       <template is="dom-if" if=[[_empty(metric.constraints.items)]]>
@@ -115,7 +128,7 @@ Example:
          */
         metric: {
           type: Object,
-          value: { constraints: {} }
+          value: {}
         },
         /**
          * If true, a new metric is being created; if false, an already existing metric is being edited.
@@ -133,30 +146,37 @@ Example:
         }
       },
 
+      ready: function() {
+        this.set('metric.constraints', this.metric.constraints || {});
+        this.set('metric.constraints.items', this.metric.constraints.items || []);
+      },
+
       /**
        * Resets the form fields to empty values.
        */
       resetFields: function() {
-        this.metric = { constraints: {} };
+        this.metric = { constraints: { items: [] } };
       },
 
       _addItem: function() {
-        var items = this.metric.constraints.items || [];
-        items.push({
+        this.push('metric.constraints.items', {
           name: '',
           description: '',
           maxItems: 1,
           hidden: false
         });
-        this.set('metric.constraints.items', items);
+      },
+
+      _removeItem: function(e) {
+        this.splice('metric.constraints.items', e.target.dataIndex, 1);
       },
 
       _resultFormatter: function(item) {
         return item.name;
       },
 
-      _empty: function(entries) {
-        return entries && entries.length === 0;
+      _empty: function(items) {
+        return !items || items.length === 0;
       }
     });
   </script>
