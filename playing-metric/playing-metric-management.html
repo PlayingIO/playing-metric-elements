@@ -99,19 +99,19 @@ An element for managing metrics in Playing game services.
                     <div>[[i18n('play.metric.new')]]</div>
                   </paper-button>
                   <paper-listbox no-animation id="menu" selectable="item" slot="dropdown-content">
-                    <paper-icon-item name="point" on-tap="_createPoint">
+                    <paper-icon-item id="point" on-tap="_createMetric">
                       <iron-icon icon="mostly:user" slot="item-icon"></iron-icon>
                       <span>[[i18n('play.metric.new.point')]]</span>
                     </paper-icon-item>
-                    <paper-icon-item name="set" on-tap="_createSet">
+                    <paper-icon-item id="set" on-tap="_createMetric">
                       <iron-icon icon="mostly:user" slot="item-icon"></iron-icon>
                       <span>[[i18n('play.metric.new.set')]]</span>
                     </paper-icon-item>
-                    <paper-icon-item name="state" on-tap="_createState">
+                    <paper-icon-item id="state" on-tap="_createMetric">
                       <iron-icon icon="mostly:user" slot="item-icon"></iron-icon>
                       <span>[[i18n('play.metric.new.state')]]</span>
                     </paper-icon-item>
-                    <paper-icon-item name="compound" on-tap="_createCompound">
+                    <paper-icon-item id="compound" on-tap="_createMetric">
                       <iron-icon icon="mostly:user" slot="item-icon"></iron-icon>
                       <span>[[i18n('play.metric.new.compound')]]</span>
                     </paper-icon-item>
@@ -148,27 +148,27 @@ An element for managing metrics in Playing game services.
         </section>
 
         <section name="manage-point">
-          <playing-metric-point-management
-                  username="[[selectedMetric]]"
-                  readonly$="[[readonly]]"></playing-metric-point-management>
+          <playing-manage-point
+                  metric="[[selectedMetric]]"
+                  readonly$="[[readonly]]" refetch></playing-manage-point>
         </section>
 
         <section name="manage-set">
-          <playing-metric-set-management
-                  username="[[selectedMetric]]"
-                  readonly$="[[readonly]]"></playing-metric-point-management>
+          <playing-manage-set
+                  metric="[[selectedMetric]]"
+                  readonly$="[[readonly]]" refetch></playing-manage-set>
         </section>
 
         <section name="manage-state">
-          <playing-metric-state-management
-                  username="[[selectedMetric]]"
-                  readonly$="[[readonly]]"></playing-metric-state-management>
+          <playing-manage-state-management
+                  metric="[[selectedMetric]]"
+                  readonly$="[[readonly]]" refetch></playing-manage-state>
         </section>
 
         <section name="manage-compound">
-          <playing-metric-compound-management
-                  username="[[selectedMetric]]"
-                  readonly$="[[readonly]]"></playing-metric-compound-management>
+          <playing-manage-compound
+                  metric="[[selectedMetric]]"
+                  readonly$="[[readonly]]" refetch></playing-manage-compound>
         </section>
       </iron-pages>
     </mostly-page>
@@ -191,9 +191,9 @@ An element for managing metrics in Playing game services.
         },
 
         /**
-         * Selected metric id.
+         * Selected metric.
          */
-        selectedMetric: String,
+        selectedMetric: Object,
 
         /**
          * True if currently in read only mode.
@@ -228,26 +228,24 @@ An element for managing metrics in Playing game services.
       /**
        * Got to the 'create-metric' page.
        */
-      _createPoint: function() {
-        this.page = 'create-point';
+      _createMetric: function(e) {
+        switch (e.target.id) {
+          case 'point': this.page ='create-point'; break;
+          case 'set': this.page ='create-set'; break;
+          case 'state': this.page ='create-state'; break;
+          case 'compound': this.page ='create-compound'; break;
+        }
       },
 
-      _createSet: function() {
-        this.page = 'create-set';
-      },
-
-      _createState: function() {
-        this.page = 'create-state';
-      },
-
-      _createCompound: function() {
-        this.page = 'create-compound';
-      },
-
-      _managePoint: function(e) {
+      _manageMetric: function(e) {
         this.selectedMetric = null;
         this.selectedMetric = e.detail.metric;
-        this.page = 'manage-point';
+        switch (this.selectedMetric.type) {
+          case 'point': this.page ='manage-point'; break;
+          case 'set': this.page ='manage-set'; break;
+          case 'state': this.page ='manage-state'; break;
+          case 'compound': this.page ='manage-compound'; break;
+        }
       },
 
       _hasAdministrationPermissions: function(user) {
@@ -275,8 +273,8 @@ An element for managing metrics in Playing game services.
       },
 
       ready: function() {
-        window.addEventListener('managePoint', (e) => {
-          this._managePoint(e);
+        window.addEventListener('manageMetric', (e) => {
+          this._manageMetric(e);
         });
       },
 
