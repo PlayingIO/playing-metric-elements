@@ -28,9 +28,9 @@
 <!--
 An element for managing metrics in Playing game services.
 @group Playing UI Elements
-@element playing-metric-management
+@element playing-metrics
 -->
-<dom-module id="playing-metric-management">
+<dom-module id="playing-metrics">
   <template>
     <style include="iron-flex iron-flex-alignment mostly-styles">
       :host {
@@ -147,28 +147,11 @@ An element for managing metrics in Playing game services.
           </paper-card>
         </section>
 
-        <section name="manage-point">
-          <playing-manage-point
+        <section name="manage-metric">
+          <playing-manage-metric
                   metric="[[selectedMetric.id]]"
-                  readonly$="[[readonly]]" refetch></playing-manage-point>
-        </section>
-
-        <section name="manage-set">
-          <playing-manage-set
-                  metric="[[selectedMetric.id]]"
-                  readonly$="[[readonly]]" refetch></playing-manage-set>
-        </section>
-
-        <section name="manage-state">
-          <playing-manage-state-management
-                  metric="[[selectedMetric.id]]"
-                  readonly$="[[readonly]]" refetch></playing-manage-state>
-        </section>
-
-        <section name="manage-compound">
-          <playing-manage-compound
-                  metric="[[selectedMetric.id]]"
-                  readonly$="[[readonly]]" refetch></playing-manage-compound>
+                  type="[[selectedMetric.type]]"
+                  readonly$="[[readonly]]" refetch></playing-manage-metric>
         </section>
       </iron-pages>
     </mostly-page>
@@ -176,13 +159,13 @@ An element for managing metrics in Playing game services.
 
   <script>
     Polymer({
-      is: 'playing-metric-management',
+      is: 'playing-metrics',
 
       behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior, Mostly.RoutingBehavior],
 
       properties: {
         /**
-         * The metric-management page to be displayed.
+         * The metric manage page to be displayed.
          */
         page: {
           type: String,
@@ -240,12 +223,7 @@ An element for managing metrics in Playing game services.
       _manageMetric: function(e) {
         this.selectedMetric = null;
         this.selectedMetric = e.detail.metric;
-        switch (this.selectedMetric.type) {
-          case 'point': this.page ='manage-point'; break;
-          case 'set': this.page ='manage-set'; break;
-          case 'state': this.page ='manage-state'; break;
-          case 'compound': this.page ='manage-compound'; break;
-        }
+        this.page = 'manage-metric';
       },
 
       _hasAdministrationPermissions: function(user) {

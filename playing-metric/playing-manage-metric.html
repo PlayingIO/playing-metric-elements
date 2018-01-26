@@ -12,17 +12,17 @@
 <link rel="import" href="../../mostly-elements/widgets/mostly-dialog.html">
 
 <!--
-An element for managing a point metric.
+An element for managing a metric.
 
 Example:
 
-    <playing-manage-point point="Administrator"></playing-manage-point>
+    <playing-manage-metric point="Administrator"></playing-manage-metric>
 
 @group Playing Elements
-@element playing-manage-point
+@element playing-manage-metric
 -->
 
-<dom-module id="playing-manage-point">
+<dom-module id="playing-manage-metric">
   <template>
     <style include="iron-flex iron-flex-alignment iron-flex-factors mostly-styles">
       :host {
@@ -47,7 +47,7 @@ Example:
         margin: 0 0 0 5px;
       }
 
-      .avatar {
+      .icon {
         margin-top: 10px;
       }
 
@@ -121,7 +121,7 @@ Example:
         width: 50px;
       }
 
-      playing-view-metric {
+      playing-view-point {
         margin: 2em;
       }
 
@@ -153,13 +153,16 @@ Example:
     <mostly-resource id="request"
             path="points/[[_metricId(metric)]]"
             schemas='*'></mostly-resource>
+    <mostly-resource id="editRequest"
+            path="points/[[_metricId(metric)]]"
+            schemas='*'></mostly-resource>
 
     <paper-toast id="toast"></paper-toast>
 
     <paper-card>
       <div class="header horizontal layout">
         <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
-        <iron-icon icon="mostly:user" class="avatar"></iron-icon>
+        <iron-icon icon="mostly:user" class="icon"></iron-icon>
         <div class="layout vertical">
           <h4 class="name">[[metric.name]]</h4>
         </div>
@@ -180,7 +183,7 @@ Example:
       </div>
 
       <!-- metric -->
-      <playing-view-metric id="metricViewer" metric="[[metric]]"></playing-view-metric>
+      <playing-view-point id="metricViewer" metric="[[metric]]"></playing-view-point>
 
     </paper-card>
 
@@ -216,7 +219,7 @@ Example:
 
   <script>
     Polymer({
-      is: 'playing-manage-point',
+      is: 'playing-manage-metric',
       behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
       properties: {
         metric: {

@@ -1,15 +1,14 @@
 <!--
-An element for displaying metric data, which is dynamically loaded by `playing-metric-group-management`.
-This element can be overridden with custom fields.
+An element for displaying point metric data.
 
 Example:
 
-    <playing-edit-metric metric=[[metric]] new></playing-edit-metric>
+    <playing-edit-point metric=[[metric]] new></playing-edit-point>
 
 @group Playing Elements
-@element playing-view-metric
+@element playing-view-point
 -->
-<dom-module id="playing-view-metric">
+<dom-module id="playing-view-point">
   <template>
     <style>
       :host {
@@ -26,7 +25,7 @@ Example:
 
   <script>
     Polymer({
-      is: 'playing-view-metric',
+      is: 'playing-view-point',
       behaviors: [Mostly.I18nBehavior],
       properties: {
         /**
