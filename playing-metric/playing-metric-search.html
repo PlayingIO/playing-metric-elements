@@ -128,44 +128,46 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'playing-metric-search',
+    class PlayingMetricSearch extends Polymer.mixinBehaviors([Mostly.I18nBehavior], Polymer.Element) {
       
-      behaviors: [Mostly.I18nBehavior],
+      static get is () { return 'playing-metric-search' };
+      
+      static get properties () {
+        return {
+          searchTerm: {
+            type: String,
+            value: '',
+            observer: '_searchTermChanged',
+            notify: true
+          },
 
-      properties: {
+          metrics: Object,
 
-        searchTerm: {
-          type: String,
-          value: '',
-          observer: '_searchTermChanged',
-          notify: true
-        },
+          metricsCurrentPage: {
+            type: 'Number',
+            value: 1
+          },
 
-        metrics: Object,
+          currentPageSize: {
+            type: 'Number',
+            value: 10
+          }
+        };
+      }
 
-        metricsCurrentPage: {
-          type: 'Number',
-          value: 1
-        },
+      static get observers () {
+        return [
+          '_searchMetrics(metricsCurrentPage)'
+        ];
+      }
 
-        currentPageSize: {
-          type: 'Number',
-          value: 10
-        }
-      },
-
-      observers: [
-        '_searchMetrics(metricsCurrentPage)'
-      ],
-
-      _searchTermChanged: function() {
+      _searchTermChanged () {
         this.metricsCurrentPage = 1;
         this.currentPageSize = 10;
         this._searchMetrics();
-      },
+      }
 
-      _searchMetrics: function() {
+      _searchMetrics () {
         var params = {
           '$skip': (this.metricsCurrentPage - 1) * this.currentPageSize
         };
@@ -173,16 +175,18 @@
           params['name[$like]'] = this.searchTerm;
         }
         this.$.metricSearch.params = params;
-      },
+      }
 
-      _manageMetric: function(e) {
+      _manageMetric (e) {
         this.fire('manageMetric', { metric: e.model.item });
-      },
+      }
 
-      _empty: function(entries) {
+      _empty (entries) {
         return entries && entries.length === 0;
       }
 
-    });
+    }
+
+    customElements.define(PlayingMetricSearch.is, PlayingMetricSearch);
   </script>
 </dom-module>

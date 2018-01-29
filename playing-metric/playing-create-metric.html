@@ -124,73 +124,77 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'playing-create-metric',
-      behaviors: [Mostly.I18nBehavior],
-      properties: {
-        type: {
-          type: String,
-          value: ''
-        },
+    class PlayingCreateMetric extends Polymer.mixinBehaviors([Mostly.I18nBehavior], Polymer.Element) {
 
-        metric: {
-          type: Object,
-          value: { constraints: {} }
-        },
+      static get is() { return 'playing-create-metric' };
 
-        errors: {
-          type: String,
-          value: ''
-        },
+      static get properties () {
+        return {
+          type: {
+            type: String,
+            value: ''
+          },
 
-        /**
-         * If true, allows to create a new metric immediately after the current one is created
-         */
-        _createAnother: {
-          type: Boolean,
-          value: false
-        },
+          metric: {
+            type: Object,
+            value: { constraints: {} }
+          },
 
-        _currentUser: {
-          type: Object
+          errors: {
+            type: String,
+            value: ''
+          },
+
+          /**
+           * If true, allows to create a new metric immediately after the current one is created
+           */
+          _createAnother: {
+            type: Boolean,
+            value: false
+          },
+
+          _currentUser: {
+            type: Object
+          }
         }
-      },
+      }
 
-      ready: function() {
+      ready () {
+        super.ready();
         this.$.form.addEventListener('iron-form-presubmit', (event) => {
           event.preventDefault();
           this._create();
         });
-      },
+      }
 
-      _metricHeading: function(type) {
+      _metricHeading (type) {
         return this.i18n('play.metric.' + type + '.heading');
-      },
+      }
 
-      _goHome: function() {
+      _goHome () {
         this.fire('goHome');
-      },
+      }
 
       /**
        * Submits the form with `_createAnother` option set to true.
        */
-      _submitAnother: function() {
+      _submitAnother () {
         this._createAnother = true;
         this.$.form.submit();
-      },
+      }
 
       /**
        * Submits the form.
        */
-      _submit: function() {
+      _submit () {
         this._createAnother = false;
         this.$.form.submit();
-      },
+      }
 
       /**
        * Creates a new metric if the form was successfully submitted.
        */
-      _create: function() {
+      _create () {
         this._doCreate(this.metric).then((metric) => {
           this._resetFields();
           if (!this._createAnother) {
@@ -199,29 +203,31 @@
         }).catch((error) => {
           this.errors = error.message;
         });
-      },
+      }
 
-      _doCreate: function(metric) {
+      _doCreate (metric) {
         metric.type = this.type;
         this.$.request.data = metric;
         return this.$.request.post().then((response) => {
           this.fire('playing-metric-created', response.data);
         })
-      },
+      }
 
-      _cancel: function() {
+      _cancel () {
         this._resetFields();
         this._goHome();
-      },
+      }
 
-      _resetFields: function() {
+      _resetFields () {
         this.metric = {};
         this.errors = '';
-      },
+      }
 
-      _hasErrors: function() {
+      _hasErrors () {
         return this.errors !== '';
       }
-    });
+    }
+
+    customElements.define(PlayingCreateMetric.is, PlayingCreateMetric);
   </script>
 </dom-module>

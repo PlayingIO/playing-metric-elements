@@ -142,87 +142,93 @@ An element for managing metrics in Playing game services.
   </template>
 
   <script>
-    Polymer({
-      is: 'playing-metrics',
+    class PlayingMetrics extends Polymer.mixinBehaviors(
+        [Mostly.I18nBehavior, Mostly.FiltersBehavior, Mostly.RoutingBehavior], Polymer.Element) {
+      
+      static get is () { return 'playing-metrics' };
+      
+      static get properties () {
+        return {
+          /**
+           * The metric manage page to be displayed.
+           */
+          page: {
+            type: String,
+            value: 'search',
+            notify: true
+          },
 
-      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior, Mostly.RoutingBehavior],
+          /**
+           * Selected metric.
+           */
+          selectedMetric: Object,
 
-      properties: {
-        /**
-         * The metric manage page to be displayed.
-         */
-        page: {
-          type: String,
-          value: 'search',
-          notify: true
-        },
+          /**
+           * Type of created metric
+           */
+          createdType: String,
 
-        /**
-         * Selected metric.
-         */
-        selectedMetric: Object,
+          /**
+           * True if currently in read only mode.
+           */
+          readonly: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
 
-        /**
-         * Type of created metric
-         */
-        createdType: String,
-
-        /**
-         * True if currently in read only mode.
-         */
-        readonly: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
-        },
-
-        _currentUser: {
-          type: Object
+          _currentUser: {
+            type: Object
+          }
         }
-      },
+      }
 
-      listeners: {
-        'goHome': '_goSearch',
-        'playing-metric-created': '_toast'
-      },
+      ready () {
+        super.ready();
+        this.addEventListener('goHome', this._goSearch);
+        this.addEventListener('playing-metric-created', this._toast);
+        this.addEventListener('manageMetric', (e) => {
+          this._manageMetric(e);
+        });
+      }
 
       /**
        * Go to the 'search' page.
        */
-      _goSearch: function() {
+      _goSearch () {
         this.selectedMetric = null;
         this.$$('playing-metric-search')._searchTermChanged();
         this.entity = {};
         this.page = 'search';
         this.navigateTo('play', 'metric-management');
-      },
+      }
 
       /**
        * Got to the 'create-metric' page.
        */
-      _createMetric: function(e) {
+      _createMetric (e) {
         this.createdType = e.target.id;
         this.page = 'create-metric';
-      },
+      }
 
-      _manageMetric: function(e) {
+      _manageMetric (e) {
         this.selectedMetric = null;
         this.selectedMetric = e.detail.metric;
         this.page = 'manage-metric';
-      },
+      }
 
-      _hasAdministrationPermissions: function(user) {
+      _hasAdministrationPermissions (user) {
         return user && (user.isAdministrator || this.isMember(user, 'powerusers'));
-      },
+      }
 
-      _canCreateMetric: function(readonly, currentUser) {
+      _canCreateMetric (readonly, currentUser) {
         return !readonly && this._hasAdministrationPermissions(currentUser);
-      },
+      }
 
       /**
        * Displays a message.
        */
-      _toast: function(event) {
+      _toast (event) {
         var msg;
         switch (event.type) {
           case 'playing-metric-created':
@@ -233,21 +239,16 @@ An element for managing metrics in Playing game services.
           this.$.toast.text = msg;
           this.$.toast.open();
         }
-      },
-
-      ready: function() {
-        window.addEventListener('manageMetric', (e) => {
-          this._manageMetric(e);
-        });
-      },
+      }
 
       /**
        * Determines whether a custom element is registered
        */
-      _isRegistered: function(tag) {
+      _isRegistered (tag) {
         return document.createElement(tag) instanceof Polymer.Element;
       }
+    }
 
-    });
+    customElements.define(PlayingMetrics.is, PlayingMetrics);
   </script>
 </dom-module>

@@ -164,7 +164,8 @@ Example:
         <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
         <iron-icon icon="mostly:user" class="icon"></iron-icon>
         <div class="layout vertical">
-          <h4 class="name">[[metric.name]]</h4>
+          <h3 class="name">[[metric.name]]</h3>
+          <h4>[[_metricHeading(type)]]</h4>
         </div>
 
         <div class="actions">
@@ -234,9 +235,9 @@ Example:
     class PlayingManageMetric extends Polymer.mixinBehaviors(
         [Mostly.I18nBehavior, Mostly.FiltersBehavior], Polymer.Element) {
       
-      static get is() { return 'playing-manage-metric' };
+      static get is () { return 'playing-manage-metric' };
       
-      static get properties() {
+      static get properties () {
         return {
 
           metric: {
@@ -288,6 +289,10 @@ Example:
         } else {
           return type + 's/' + metric;
         }
+      }
+
+      _metricHeading (type) {
+        return this.i18n('play.metric.' + type + '.heading');
       }
 
       _toggleDialog (e) {
