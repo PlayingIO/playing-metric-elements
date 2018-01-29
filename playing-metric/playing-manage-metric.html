@@ -217,7 +217,22 @@ Example:
         <form class="vertical layout">
           <paper-input label="[[i18n('play.metric.field.name')]]" value="[[metric.name]]"
                   always-float-label readonly required></paper-input>
-          <playing-edit-point id="metricEditor"></playing-edit-point>
+
+          <template is="dom-if" if="[[_isEqual(type, 'point')]]">
+            <playing-edit-point id="propertyEditor"></playing-edit-point>
+          </template>
+
+          <template is="dom-if" if="[[_isEqual(type, 'set')]]">
+            <playing-edit-set id="propertyEditor"></playing-edit-set>
+          </template>
+
+          <template is="dom-if" if="[[_isEqual(type, 'state')]]">
+            <playing-edit-state id="propertyEditor"></playing-edit-state>
+          </template>
+
+          <template is="dom-if" if="[[_isEqual(type, 'compound')]]">
+            <playing-edit-compound id="propertyEditor"</playing-edit-compound>
+          </template>
         </form>
       </iron-form>
       <div class="buttons horizontal end-justified layout">
@@ -234,9 +249,9 @@ Example:
   <script>
     class PlayingManageMetric extends Polymer.mixinBehaviors(
         [Mostly.I18nBehavior, Mostly.FiltersBehavior], Polymer.Element) {
-      
+
       static get is () { return 'playing-manage-metric' };
-      
+
       static get properties () {
         return {
 
@@ -300,7 +315,8 @@ Example:
       }
 
       _toggleEditMetric () {
-        this.$.metricEditor.metric = JSON.parse(JSON.stringify(this.metric));
+        var propertyEditor = Polymer.dom(this.root).querySelector("#propertyEditor");
+        propertyEditor.metric = JSON.parse(JSON.stringify(this.metric));
         this.$.editMetricDialog.toggle();
       }
 
@@ -309,9 +325,10 @@ Example:
       }
 
       _saveMetric () {
+        var propertyEditor = Polymer.dom(this.root).querySelector("#propertyEditor");
         this.$.editMetricDialog.toggle();
         var editedMetric = JSON.parse(JSON.stringify(this.metric));
-        editedMetric = this.$.metricEditor.metric;
+        editedMetric = propertyEditor.metric;
         this.$.editRequest.data = editedMetric;
         this.$.editRequest.patch().then((response) => {
           this.metric = response.data;
