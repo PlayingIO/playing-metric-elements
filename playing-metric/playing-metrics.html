@@ -125,17 +125,17 @@ An element for managing metrics in Playing game services.
 
         <section name="create-metric">
           <paper-card>
-            <playing-create-metric
+            <playing-create-metric id="metricCreator"
                   type="[[createdType]]"
                   readonly$="[[readonly]]"></playing-create-metric>
           </paper-card>
         </section>
 
         <section name="manage-metric">
-          <playing-manage-metric
+          <playing-manage-metric id="metricManager"
                   metric="[[selectedMetric.id]]"
                   type="[[selectedMetric.type]]"
-                  readonly$="[[readonly]]" refetch></playing-manage-metric>
+                  readonly$="[[readonly]]"></playing-manage-metric>
         </section>
       </iron-pages>
     </mostly-page>
