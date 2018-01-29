@@ -151,10 +151,10 @@ Example:
     </style>
 
     <mostly-resource id="request"
-            path="points/[[_metricId(metric)]]"
+            path="[[path]]"
             schemas='*'></mostly-resource>
     <mostly-resource id="editRequest"
-            path="points/[[_metricId(metric)]]"
+            path="[[path]]"
             schemas='*'></mostly-resource>
 
     <paper-toast id="toast"></paper-toast>
@@ -183,8 +183,21 @@ Example:
       </div>
 
       <!-- metric -->
-      <playing-view-point id="metricViewer" metric="[[metric]]"></playing-view-point>
+      <template is="dom-if" if="[[_isEqual(metric.type, 'point')]]">
+        <playing-view-point id="metricViewer" metric="[[metric]]"></playing-view-point>
+      </template>
 
+      <template is="dom-if" if="[[_isEqual(metric.type, 'set')]]">
+        <playing-view-set id="metricViewer" metric="[[metric]]"></playing-view-set>
+      </template>
+
+      <template is="dom-if" if="[[_isEqual(metric.type, 'state')]]">
+        <playing-view-state id="metricViewer" metric="[[metric]]"></playing-view-state>
+      </template>
+
+      <template is="dom-if" if="[[_isEqual(metric.type, 'compound')]]">
+        <playing-view-compound id="metricViewer" metric="[[metric]]"></playing-view-compound>
+      </template>
     </paper-card>
 
     <mostly-dialog id="deleteMetricDialog" with-backdrop>
@@ -218,62 +231,79 @@ Example:
   </template>
 
   <script>
-    Polymer({
-      is: 'playing-manage-metric',
-      behaviors: [Mostly.I18nBehavior, Mostly.FiltersBehavior],
-      properties: {
-        metric: {
-          type: Object,
-          observer: '_fetch'
-        },
+    class PlayingManageMetric extends Polymer.mixinBehaviors(
+        [Mostly.I18nBehavior, Mostly.FiltersBehavior], Polymer.Element) {
+      
+      static get is() { return 'playing-manage-metric' };
+      
+      static get properties() {
+        return {
 
-        empty: Boolean,
+          metric: {
+            type: Object,
+            observer: '_fetch'
+          },
 
-        readonly: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
-        },
-
-        errors: {
           type: String,
-          reflectToAttribute: true
-        }
-      },
 
-      ready: function() {
+          path: {
+            type: String,
+            computed: '_metricPath(type, metric)'
+          },
+
+          empty: Boolean,
+
+          readonly: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+          },
+
+          errors: {
+            type: String,
+            reflectToAttribute: true
+          }
+        }
+      }
+
+      ready () {
+        super.ready();
         this.$.editMetricForm.addEventListener('iron-form-presubmit', (event) => {
           event.preventDefault();
           this._saveMetric();
         });
-      },
+      }
 
-      _fetch: function() {
+      _fetch () {
         if (typeof this.metric === 'string') {
           this.$.request.get().then((response) => {
             this.metric = response.data;
           });
         }
-      },
+      }
 
-      _metricId: function(metric) {
-        return (metric && metric.id) || metric;
-      },
+      _metricPath (type, metric) {
+        if (metric && metric.type && metric.id) {
+          return metric.type + 's/' + metric.id;
+        } else {
+          return type + 's/' + metric;
+        }
+      }
 
-      _toggleDialog: function(e) {
+      _toggleDialog (e) {
         this.$.dialog.toggle();
-      },
+      }
 
-      _toggleEditMetric: function() {
+      _toggleEditMetric () {
         this.$.metricEditor.metric = JSON.parse(JSON.stringify(this.metric));
         this.$.editMetricDialog.toggle();
-      },
+      }
 
-      _submitEditMetric: function() {
+      _submitEditMetric () {
         this.$.editMetricForm.submit();
-      },
+      }
 
-      _saveMetric: function() {
+      _saveMetric () {
         this.$.editMetricDialog.toggle();
         var editedMetric = JSON.parse(JSON.stringify(this.metric));
         editedMetric = this.$.metricEditor.metric;
@@ -282,28 +312,30 @@ Example:
           this.metric = response.data;
           this._toast(this.i18n('play.metric.updated'));
         });
-      },
+      }
 
-      _toggleDeleteMetric: function() {
+      _toggleDeleteMetric () {
         this.$.deleteMetricDialog.toggle();
-      },
+      }
 
-      _deleteMetric: function() {
+      _deleteMetric () {
         this.$.deleteMetricDialog.toggle();
         this.$.editRequest.remove().then((response) => {
           this.fire('playing-metric-deleted', this.metric);
           this._goHome();
         });
-      },
+      }
 
-      _goHome: function() {
+      _goHome () {
         this.fire('goHome');
-      },
+      }
 
-      _toast: function(msg) {
+      _toast (msg) {
         this.$.toast.text = msg;
         this.$.toast.open();
       }
-    });
+    }
+
+    customElements.define(PlayingManageMetric.is, PlayingManageMetric);
   </script>
 </dom-module>

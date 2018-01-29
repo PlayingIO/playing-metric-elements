@@ -3,12 +3,12 @@ An element for displaying point metric data.
 
 Example:
 
-    <playing-view-point metric=[[metric]] new></playing-view-point>
+    <playing-view-state metric=[[metric]] new></playing-view-state>
 
 @group Playing Elements
-@element playing-view-point
+@element playing-view-state
 -->
-<dom-module id="playing-view-point">
+<dom-module id="playing-view-state">
   <template>
     <style>
       :host {
@@ -24,9 +24,9 @@ Example:
   </template>
 
   <script>
-    class PlayingViewPoint extends Polymer.mixinBehaviors([Mostly.I18nBehavior], Polymer.Element) {
+    class PlayingViewState extends Polymer.mixinBehaviors([Mostly.I18nBehavior], Polymer.Element) {
       
-      static get is() { return 'playing-view-point' };
+      static get is() { return 'playing-view-state' };
       
       static get properties() {
         return {
@@ -41,6 +41,6 @@ Example:
       }
     }
 
-    customElements.define(PlayingViewPoint.is, PlayingViewPoint);
+    customElements.define(PlayingViewState.is, PlayingViewState);
   </script>
 </dom-module>
