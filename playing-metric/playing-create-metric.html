@@ -92,19 +92,19 @@
                 auto-validate required always-float-label>
         </paper-input>
 
-        <template is="dom-if" if="[[_isMetric('point')]]">
+        <template is="dom-if" if="[[_isEqual(type, 'point')]]">
           <playing-edit-point id="propertyEditor" metric="{{metric}}" new></playing-edit-point>
         </template>
 
-        <template is="dom-if" if="[[_isMetric('set')]]">
+        <template is="dom-if" if="[[_isEqual(type, 'set')]]">
           <playing-edit-set id="propertyEditor" metric="{{metric}}" new></playing-edit-set>
         </template>
 
-        <template is="dom-if" if="[[_isMetric('state')]]">
+        <template is="dom-if" if="[[_isEqual(type, 'state')]]">
           <playing-edit-state id="propertyEditor" metric="{{metric}}" new></playing-edit-state>
         </template>
 
-        <template is="dom-if" if="[[_isMetric('compound')]]">
+        <template is="dom-if" if="[[_isEqual(type, 'compound')]]">
           <playing-edit-compound id="propertyEditor" metric="{{metric}}" new></playing-edit-compound>
         </template>
 
@@ -130,12 +130,12 @@
       properties: {
         type: {
           type: String,
-          value: 'point'
+          value: ''
         },
 
         metric: {
           type: Object,
-          value: {}
+          value: { constraints: {} }
         },
 
         errors: {
@@ -161,10 +161,6 @@
           event.preventDefault();
           this._create();
         });
-      },
-
-      _isMetric: function(type) {
-        return this.type === type;
       },
 
       _metricHeading: function(type) {

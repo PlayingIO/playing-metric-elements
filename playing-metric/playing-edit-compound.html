@@ -69,47 +69,49 @@ Example:
   </template>
 
   <script>
-    Polymer({
-      is: 'playing-edit-compound',
-      behaviors: [Mostly.I18nBehavior],
-      properties: {
-        /**
-         * The metric object to be edited or created.
-         */
-        metric: {
-          type: Object,
-          value: {}
-        },
-        /**
-         * If true, a new metric is being created; if false, an already existing metric is being edited.
-         */
-        new: {
-          type: Boolean,
-          value: false
-        },
+    class PlayingEditCompound extends Polymer.mixinBehaviors([Mostly.I18nBehavior], Polymer.Element) {
+      
+      static get is() { return 'playing-edit-compound' };
+      
+      static get properties() {
+        return {
+          /**
+           * The metric object to be edited or created.
+           */
+          metric: {
+            type: Object,
+            value: {}
+          },
 
-        resultFormatter: {
-          type: Function,
-          value: function() {
-            return this._resultFormatter.bind(this);
+          /**
+           * If true, a new metric is being created; if false, an already existing metric is being edited.
+           */
+          new: {
+            type: Boolean,
+            value: false
+          },
+
+          resultFormatter: {
+            type: Function,
+            value: function() {
+              return this._resultFormatter.bind(this);
+            }
           }
         }
-      },
-
-      ready: function() {
-        this.metric.constraints = this.metric.constraints || {};
-      },
+      }
 
       /**
        * Resets the form fields to empty values.
        */
-      resetFields: function() {
+      _resetFields () {
         this.metric = { constraints: {} };
-      },
+      }
 
-      _resultFormatter: function(item) {
+      _resultFormatter (item) {
         return item.name;
       }
-    });
+    }
+
+    customElements.define(PlayingEditCompound.is, PlayingEditCompound);
   </script>
 </dom-module>
