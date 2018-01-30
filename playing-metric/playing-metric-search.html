@@ -34,6 +34,26 @@
         padding: 0;
       }
 
+      .fade-6 {
+        opacity: 0.6;
+      }
+
+      .metric-point {
+        color: #2060df;
+      }
+
+      .metric-set {
+        color: #551fad;
+      }
+
+      .metric-state {
+        color: #9c1c49;
+      }
+
+      .metric-compound {
+        color: #000;
+      }
+
       .table-header {
         @apply --layout-horizontal;
         @apply --layout-center;
@@ -101,6 +121,14 @@
       <h3 class="title">
         <iron-icon icon="mostly:user"></iron-icon> [[i18n('play.metric.heading')]]
       </h3>
+      <div class="fade-6">
+        <p>[[i18n('play.metric.search.guide')]]
+          <span class="metric-point"><i class="icon-point"></i> [[i18n('play.metric.point')]]</span>,
+          <span class="metric-set"><i class="icon-set"></i> [[i18n('play.metric.set')]]</span>,
+          <span class="metric-state"><i class="icon-state"></i> [[i18n('play.metric.state')]]</span>,
+          <span class="metric-compound"><i class="icon-compound"></i> [[i18n('play.metric.compound.heading')]] </span>.
+        </p>
+      </div>
       <div class="table">
         <div class="table-header">
           <div class="flex-1">[[i18n('play.metric.field.image')]]</div>
