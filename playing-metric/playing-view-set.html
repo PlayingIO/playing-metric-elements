@@ -14,12 +14,34 @@ Example:
       :host {
         display: block;
       }
+
+      *[role=widget] {
+        margin-bottom: 16px;
+      }
+
+      label {
+        @apply --mostly-label;
+      }
+
+      div.multiline {
+        white-space: pre-line;
+      }
+
+      div {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        -ms-hyphens: auto;
+        -o-hyphens: auto;
+        hyphens: auto;
+      }
     </style>
-    <div class="layout horizontal">
-      <div class="layout vertical flex">
-        <label>[[i18n('play.metric.field.description')]]</label>
-        <span>[[metric.description]]</span>
-      </div>
+    
+    <div role="widget" hidden$="[[!metric.description]]">
+      <label>[[i18n('play.metric.field.description')]]</label>
+      <div name="description" class="multiline">[[metric.description]]</div>
     </div>
   </template>
 
