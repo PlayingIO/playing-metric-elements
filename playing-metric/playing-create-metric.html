@@ -82,7 +82,7 @@
 
     <div class="header horizontal layout center">
       <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
-      <h3><iron-icon icon="mostly:user"></iron-icon>[[_metricHeading(type)]]</h3>
+      <h3><iron-icon icon="mostly:[[type]]"></iron-icon>[[_metricHeading(type)]]</h3>
     </div>
 
     <iron-form id="form">
@@ -137,7 +137,7 @@
 
           metric: {
             type: Object,
-            value: { constraints: {} }
+            value: () => { return { constraints: {} } }
           },
 
           errors: {
