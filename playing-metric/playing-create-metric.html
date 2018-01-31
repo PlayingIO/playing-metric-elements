@@ -82,7 +82,7 @@
 
     <div class="header horizontal layout center">
       <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
-      <h3><iron-icon icon="mostly:[[type]]"></iron-icon>[[_metricHeading(type)]]</h3>
+      <h3><iron-icon icon$="mostly:[[type]]"></iron-icon>[[_metricHeading(type)]]</h3>
     </div>
 
     <iron-form id="form">
@@ -128,7 +128,7 @@
 
       static get is() { return 'playing-create-metric' };
 
-      static get properties () {
+      static get properties() {
         return {
           type: {
             type: String,
@@ -159,7 +159,7 @@
         }
       }
 
-      ready () {
+      ready() {
         super.ready();
         this.$.form.addEventListener('iron-form-presubmit', (event) => {
           event.preventDefault();
@@ -167,18 +167,18 @@
         });
       }
 
-      _metricHeading (type) {
+      _metricHeading(type) {
         return this.i18n('play.metric.' + type + '.heading');
       }
 
-      _goHome () {
+      _goHome() {
         this.fire('goHome');
       }
 
       /**
        * Submits the form with `_createAnother` option set to true.
        */
-      _submitAnother () {
+      _submitAnother() {
         this._createAnother = true;
         this.$.form.submit();
       }
@@ -186,7 +186,7 @@
       /**
        * Submits the form.
        */
-      _submit () {
+      _submit() {
         this._createAnother = false;
         this.$.form.submit();
       }
@@ -194,7 +194,7 @@
       /**
        * Creates a new metric if the form was successfully submitted.
        */
-      _create () {
+      _create() {
         this._doCreate(this.metric).then((metric) => {
           this._resetFields();
           if (!this._createAnother) {
@@ -205,7 +205,7 @@
         });
       }
 
-      _doCreate (metric) {
+      _doCreate(metric) {
         metric.type = this.type;
         this.$.request.data = metric;
         return this.$.request.post().then((response) => {
@@ -213,17 +213,17 @@
         })
       }
 
-      _cancel () {
+      _cancel() {
         this._resetFields();
         this._goHome();
       }
 
-      _resetFields () {
+      _resetFields() {
         this.metric = {};
         this.errors = '';
       }
 
-      _hasErrors () {
+      _hasErrors() {
         return this.errors !== '';
       }
     }

@@ -145,9 +145,9 @@ An element for managing metrics in Playing game services.
     class PlayingMetrics extends Polymer.mixinBehaviors(
         [Mostly.I18nBehavior, Mostly.FiltersBehavior, Mostly.RoutingBehavior], Polymer.Element) {
 
-      static get is () { return 'playing-metrics' };
+      static get is() { return 'playing-metrics' };
 
-      static get properties () {
+      static get properties() {
         return {
           /**
            * The metric manage page to be displayed.
@@ -183,7 +183,7 @@ An element for managing metrics in Playing game services.
         }
       }
 
-      ready () {
+      ready() {
         super.ready();
         this.addEventListener('goHome', this._goSearch);
         this.addEventListener('playing-metric-created', this._toast);
@@ -195,7 +195,7 @@ An element for managing metrics in Playing game services.
       /**
        * Go to the 'search' page.
        */
-      _goSearch () {
+      _goSearch() {
         this.selectedMetric = null;
         this.$$('playing-metric-search')._searchTermChanged();
         this.entity = {};
@@ -206,29 +206,29 @@ An element for managing metrics in Playing game services.
       /**
        * Got to the 'create-metric' page.
        */
-      _createMetric (e) {
+      _createMetric(e) {
         this.createdType = e.target.id;
         this.page = 'create-metric';
       }
 
-      _manageMetric (e) {
+      _manageMetric(e) {
         this.selectedMetric = null;
         this.selectedMetric = e.detail.metric;
         this.page = 'manage-metric';
       }
 
-      _hasAdministrationPermissions (user) {
+      _hasAdministrationPermissions(user) {
         return user && (user.isAdministrator || this.isMember(user, 'powerusers'));
       }
 
-      _canCreateMetric (readonly, currentUser) {
+      _canCreateMetric(readonly, currentUser) {
         return !readonly && this._hasAdministrationPermissions(currentUser);
       }
 
       /**
        * Displays a message.
        */
-      _toast (event) {
+      _toast(event) {
         var msg;
         switch (event.type) {
           case 'playing-metric-created':
@@ -244,7 +244,7 @@ An element for managing metrics in Playing game services.
       /**
        * Determines whether a custom element is registered
        */
-      _isRegistered (tag) {
+      _isRegistered(tag) {
         return document.createElement(tag) instanceof Polymer.Element;
       }
     }

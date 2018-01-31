@@ -43,6 +43,10 @@ Example:
       }
 
       .name {
+        margin: 10px 0 5px 5px;
+      }
+
+      .subname {
         font-weight: normal;
         margin: 0 0 0 5px;
       }
@@ -162,10 +166,10 @@ Example:
     <paper-card>
       <div class="header horizontal layout">
         <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
-        <iron-icon icon="mostly:user" class="icon"></iron-icon>
+        <iron-icon icon$="mostly:[[type]]" class="icon"></iron-icon>
         <div class="layout vertical">
           <h3 class="name">[[metric.name]]</h3>
-          <h4>[[_metricHeading(type)]]</h4>
+          <h4 class="subname">[[_metricHeading(type)]]</h4>
         </div>
 
         <div class="actions">
@@ -206,9 +210,6 @@ Example:
           <h2>[[i18n('play.metric.editMetric.heading')]]</h2>
           <iron-form id="editMetricForm">
             <form class="vertical layout">
-              <paper-input label="[[i18n('play.metric.field.name')]]" value="[[metric.name]]"
-                      always-float-label readonly required></paper-input>
-
               <template is="dom-if" if="[[_isEqual(type, 'point')]]">
                 <playing-edit-point id="metricEditor" metric="[[metric]]"></playing-edit-point>
               </template>
@@ -253,9 +254,9 @@ Example:
     class PlayingManageMetric extends Polymer.mixinBehaviors(
         [Mostly.I18nBehavior, Mostly.FiltersBehavior], Polymer.Element) {
 
-      static get is () { return 'playing-manage-metric' };
+      static get is() { return 'playing-manage-metric' };
 
-      static get properties () {
+      static get properties() {
         return {
           /**
            * The metric manage page to be displayed.
@@ -293,7 +294,7 @@ Example:
         }
       }
 
-      ready () {
+      ready() {
         super.ready();
         this.$.editMetricForm.addEventListener('iron-form-presubmit', (event) => {
           event.preventDefault();
@@ -301,7 +302,7 @@ Example:
         });
       }
 
-      _fetch () {
+      _fetch() {
         if (typeof this.metric === 'string') {
           this.$.request.get().then((response) => {
             this.metric = response.data;
@@ -309,7 +310,7 @@ Example:
         }
       }
 
-      _metricPath (type, metric) {
+      _metricPath(type, metric) {
         if (metric && metric.type && metric.id) {
           return metric.type + 's/' + metric.id;
         } else {
@@ -317,27 +318,27 @@ Example:
         }
       }
 
-      _metricHeading (type) {
+      _metricHeading(type) {
         return this.i18n('play.metric.' + type + '.heading');
       }
 
-      _toggleDialog (e) {
+      _toggleDialog(e) {
         this.$.dialog.toggle();
       }
 
-      _toggleEditMetric () {
+      _toggleEditMetric() {
         this.page = (this.page === 'viewer')? 'editor' : 'viewer';
       }
 
-      _cancelEditMetric () {
+      _cancelEditMetric() {
         this.page = 'viewer';
       }
 
-      _submitEditMetric () {
+      _submitEditMetric() {
         this.$.editMetricForm.submit();
       }
 
-      _saveMetric () {
+      _saveMetric() {
         this.page = 'viewer';
         var editedMetric = JSON.parse(JSON.stringify(this.metric));
         this.$.editRequest.data = editedMetric;
@@ -347,11 +348,11 @@ Example:
         });
       }
 
-      _toggleDeleteMetric () {
+      _toggleDeleteMetric() {
         this.$.deleteMetricDialog.toggle();
       }
 
-      _deleteMetric () {
+      _deleteMetric() {
         this.$.deleteMetricDialog.toggle();
         this.$.editRequest.remove().then((response) => {
           this.fire('playing-metric-deleted', this.metric);
@@ -359,12 +360,12 @@ Example:
         });
       }
 
-      _goHome () {
+      _goHome() {
         this.page = 'viewer';
         this.fire('goHome');
       }
 
-      _toast (msg) {
+      _toast(msg) {
         this.$.toast.text = msg;
         this.$.toast.open();
       }
