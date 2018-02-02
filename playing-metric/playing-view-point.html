@@ -10,7 +10,7 @@ Example:
 -->
 <dom-module id="playing-view-point">
   <template>
-    <style>
+    <style include="iron-flex iron-flex-alignment iron-flex-factors mostly-styles">
       :host {
         display: block;
       }
@@ -37,9 +37,37 @@ Example:
         -o-hyphens: auto;
         hyphens: auto;
       }
+
+      .table-header {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        background-color: var(--mostly-table-header-background, #fafafa);
+        color: var(--mostly-text-default, rgba(0, 0, 0, 0.54));
+        font-weight: 400;
+        min-height: 48px;
+        padding: 0 0 0 12px;
+        border-bottom: 2px solid var(--mostly-border, #eee);
+        box-shadow: 0 -1px 0 rgba(0,0,0,0.2) inset;
+      }
+
+      .table-row {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        padding: 12px 0 12px 12px;
+        border-bottom: 1px solid var(--mostly-border, #eee);
+        cursor: pointer;
+      }
+
+      .table-row:hover {
+        background: var(--mostly-container-hover, #fafafa);
+      }
+
+      .table {
+        border: 1px solid var(--mostly-border, #eee);
+      }
     </style>
     
-    <div role="widget" hidden$="[[!metric.description]]">
+    <div role="widget">
       <label>[[i18n('play.metric.field.description')]]</label>
       <div name="description" class="multiline">[[metric.description]]</div>
     </div>
@@ -47,6 +75,22 @@ Example:
     <div role="widget" hidden$="[[!metric.image]]">
       <label>[[i18n('play.metric.field.image')]]</label>
       <img id="image" src$="[[metric.image.url]]">
+    </div>
+
+    <div role="widget">
+      <label>[[i18n('play.metric.field.constraints')]]</label>
+      <div class="table">
+        <div class="table-header">
+          <div class="flex">[[i18n('play.metric.point.constraints.minimum')]]</div>
+          <div class="flex">[[i18n('play.metric.point.constraints.maximum')]]</div>
+          <div class="flex">[[i18n('play.metric.point.constraints.default')]]</div>
+        </div>
+        <div class="table-row">
+          <div class="flex">[[metric.constraints.minimum]]</div>
+          <div class="flex">[[metric.constraints.maximum]]</div>
+          <div class="flex">[[metric.constraints.default]]</div>
+        </div>
+      </div>
     </div>
 
   </template>
