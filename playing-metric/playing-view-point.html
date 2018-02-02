@@ -10,7 +10,7 @@ Example:
 -->
 <dom-module id="playing-view-point">
   <template>
-    <style include="iron-flex iron-flex-alignment iron-flex-factors mostly-styles">
+    <style include="mostly-styles">
       :host {
         display: block;
       }
@@ -36,34 +36,6 @@ Example:
         -ms-hyphens: auto;
         -o-hyphens: auto;
         hyphens: auto;
-      }
-
-      .table-header {
-        @apply --layout-horizontal;
-        @apply --layout-center;
-        background-color: var(--mostly-table-header-background, #fafafa);
-        color: var(--mostly-text-default, rgba(0, 0, 0, 0.54));
-        font-weight: 400;
-        min-height: 48px;
-        padding: 0 0 0 12px;
-        border-bottom: 2px solid var(--mostly-border, #eee);
-        box-shadow: 0 -1px 0 rgba(0,0,0,0.2) inset;
-      }
-
-      .table-row {
-        @apply --layout-horizontal;
-        @apply --layout-center;
-        padding: 12px 0 12px 12px;
-        border-bottom: 1px solid var(--mostly-border, #eee);
-        cursor: pointer;
-      }
-
-      .table-row:hover {
-        background: var(--mostly-container-hover, #fafafa);
-      }
-
-      .table {
-        border: 1px solid var(--mostly-border, #eee);
       }
     </style>
     

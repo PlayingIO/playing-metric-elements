@@ -10,7 +10,7 @@ Example:
 -->
 <dom-module id="playing-edit-set">
   <template>
-    <style include="iron-flex iron-flex-alignment">
+    <style include="mostly-styles">
       :host {
         display: block;
         width: 100%;
@@ -88,7 +88,7 @@ Example:
       </template>
       <template is="dom-if" if=[[_empty(metric.constraints.items)]]>
         <div class="form-row">
-          <div class="emptyResult">[[i18n('play.metric.set.constraints.items.empty')]]</div>
+          <div class="empty-result">[[i18n('play.metric.set.constraints.items.empty')]]</div>
         </div>
       </template>
     </div>
