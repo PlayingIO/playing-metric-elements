@@ -39,7 +39,7 @@ Example:
       }
     </style>
     
-    <div role="widget">
+    <div role="widget" hidden$="[[!metric.description]]">
       <label>[[i18n('play.metric.field.description')]]</label>
       <div name="description" class="multiline">[[metric.description]]</div>
     </div>
@@ -57,10 +57,12 @@ Example:
           <div class="flex">[[i18n('play.metric.point.constraints.maximum')]]</div>
           <div class="flex">[[i18n('play.metric.point.constraints.default')]]</div>
         </div>
-        <div class="table-row">
-          <div class="flex">[[metric.constraints.minimum]]</div>
-          <div class="flex">[[metric.constraints.maximum]]</div>
-          <div class="flex">[[metric.constraints.default]]</div>
+        <div class="table-rows">
+          <div class="table-row">
+            <div class="flex">[[metric.constraints.minimum]]</div>
+            <div class="flex">[[metric.constraints.maximum]]</div>
+            <div class="flex">[[metric.constraints.default]]</div>
+          </div>
         </div>
       </div>
     </div>
