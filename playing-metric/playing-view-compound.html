@@ -43,7 +43,13 @@ Example:
       <label>[[i18n('play.metric.field.description')]]</label>
       <div name="description" class="multiline">[[metric.description]]</div>
     </div>
-  </template> 
+
+    <div role="widget" hidden$="[[!metric.image]]">
+      <label>[[i18n('play.metric.field.image')]]</label>
+      <img id="image" src$="[[metric.image.url]]">
+    </div>
+
+  </template>
 
   <script>
     class PlayingViewCompound extends Polymer.mixinBehaviors([Mostly.I18nBehavior], Polymer.Element) {
