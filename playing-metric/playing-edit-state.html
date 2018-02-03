@@ -10,21 +10,10 @@ Example:
 -->
 <dom-module id="playing-edit-state">
   <template>
-    <style include="iron-flex iron-flex-alignment">
+    <style include="mostly-styles">
       :host {
         display: block;
         width: 100%;
-      }
-
-      .form-rows {
-        @apply --layout-horizontal;
-        @apply --layout-center;
-        padding: 12px;
-      }
-
-      .form-cell {
-        @apply --layout-flex;
-        padding-right: 8px;
       }
     </style>
 
@@ -46,22 +35,22 @@ Example:
         </playing-tag-suggestion>
 
         <label>[[i18n('play.metric.field.constraints')]]</label>
-        <div class="form-rows">
-          <div class="form-cell">
+        <div class="form-row">
+          <div class="flex">
             <paper-input name="constraints.minimum" label="[[i18n('play.metric.field.constraints.minimum')]]"
                   type="number" value="{{metric.constraints.minimum}}" always-float-label></paper-input>
           </div>
-          <div class="form-cell">
+          <div class="flex">
             <paper-input name="constraints.maximum" label="[[i18n('play.metric.field.constraints.maximum')]]"
                   type="number" value="{{metric.constraints.maximum}}" always-float-label></paper-input>
           </div>
         </div>
-        <div class="form-rows">
-          <div class="form-cell">
+        <div class="form-row">
+          <div class="flex">
             <paper-input name="constraints.default" label="[[i18n('play.metric.field.constraints.default')]]"
                   type="number" value="{{metric.constraints.default}}" always-float-label></paper-input>
           </div>
-          <div class="form-cell">&nbsp;</div>
+          <div class="flex">&nbsp;</div>
         </div>
       </div>
     </mostly-collapse-button>

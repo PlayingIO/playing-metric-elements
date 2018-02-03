@@ -53,18 +53,32 @@ Example:
       <label>[[i18n('play.metric.set.constraints.items')]]</label>
       <div class="table">
         <div class="table-header">
-          <div class="flex">[[i18n('play.metric.field.name')]]</div>
-          <div class="flex">[[i18n('play.metric.set.constraints.items.maximum')]]</div>
-          <div class="flex">[[i18n('play.metric.set.constraints.items.hidden')]]</div>
+          <div class="flex-4">[[i18n('play.metric.field.name')]]</div>
+          <div class="flex-1">[[i18n('play.metric.set.constraints.items.maximum')]]</div>
+          <div class="flex-1">[[i18n('play.metric.set.constraints.items.hidden')]]</div>
         </div>
         <div class="table-rows">
           <template is="dom-repeat" items="[[metric.constraints.items]]" as="item">
             <div class="table-row">
-              <div class="flex">[[item.name]]</div>
-              <div class="flex">[[item.maximum]]</div>
-              <div class="flex">[[item.hidden]]</div>
+              <div class="flex-4">[[item.name]]</div>
+              <div class="flex-1">[[item.maximum]]</div>
+              <div class="flex-1">[[item.hidden]]</div>
             </div>
           </template>
+        </div>
+      </div>
+    </div>
+
+    <div role="widget">
+      <label>[[i18n('play.metric.field.constraints')]]</label>
+      <div class="table">
+        <div class="table-header">
+          <div class="flex">[[i18n('play.metric.set.constraints.maxItems')]]</div>
+        </div>
+        <div class="table-rows">
+          <div class="table-row">
+            <div class="flex">[[metric.constraints.maxItems]]</div>
+          </div>
         </div>
       </div>
     </div>
