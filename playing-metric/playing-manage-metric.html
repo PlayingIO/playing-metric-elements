@@ -190,19 +190,19 @@ Example:
       <iron-pages selected="[[page]]" attr-for-selected="name">
         <section name="viewer">
           <!-- metric -->
-          <template is="dom-if" if="[[_isEqual(metric.type, 'point')]]">
+          <template is="dom-if" if="[[_isEqual(type, 'point')]]">
             <playing-view-point id="metricViewer" metric="[[metric]]"></playing-view-point>
           </template>
 
-          <template is="dom-if" if="[[_isEqual(metric.type, 'set')]]">
+          <template is="dom-if" if="[[_isEqual(type, 'set')]]">
             <playing-view-set id="metricViewer" metric="[[metric]]"></playing-view-set>
           </template>
 
-          <template is="dom-if" if="[[_isEqual(metric.type, 'state')]]">
+          <template is="dom-if" if="[[_isEqual(type, 'state')]]">
             <playing-view-state id="metricViewer" metric="[[metric]]"></playing-view-state>
           </template>
 
-          <template is="dom-if" if="[[_isEqual(metric.type, 'compound')]]">
+          <template is="dom-if" if="[[_isEqual(type, 'compound')]]">
             <playing-view-compound id="metricViewer" metric="[[metric]]"></playing-view-compound>
           </template>
         </section>
@@ -227,7 +227,7 @@ Example:
               </template>
             </form>
           </iron-form>
-          <div class="buttons horizontal end-justified layout">
+          <div class="horizontal end-justified layout">
             <div class="flex start-justified">
               <paper-button noink on-tap="_cancelEditMetric">[[i18n('command.cancel')]]</paper-button>
             </div>

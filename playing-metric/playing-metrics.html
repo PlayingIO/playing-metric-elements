@@ -187,9 +187,7 @@ An element for managing metrics in Playing game services.
         super.ready();
         this.addEventListener('goHome', this._goSearch);
         this.addEventListener('playing-metric-created', this._toast);
-        this.addEventListener('manageMetric', (e) => {
-          this._manageMetric(e);
-        });
+        this.addEventListener('manageMetric', this._manageMetric);
       }
 
       /**
