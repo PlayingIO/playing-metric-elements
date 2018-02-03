@@ -99,19 +99,19 @@ An element for managing metrics in Playing game services.
                     <div>[[i18n('play.metric.new')]]</div>
                   </paper-button>
                   <paper-listbox no-animation id="menu" selectable="item" slot="dropdown-content">
-                    <paper-icon-item id="point" on-tap="_createMetric">
+                    <paper-icon-item id="point" data-type="point" on-tap="_createMetric">
                       <iron-icon icon="mostly:point" slot="item-icon"></iron-icon>
                       <span>[[i18n('play.metric.new.point')]]</span>
                     </paper-icon-item>
-                    <paper-icon-item id="set" on-tap="_createMetric">
+                    <paper-icon-item id="set" data-type="set" on-tap="_createMetric">
                       <iron-icon icon="mostly:set" slot="item-icon"></iron-icon>
                       <span>[[i18n('play.metric.new.set')]]</span>
                     </paper-icon-item>
-                    <paper-icon-item id="state" on-tap="_createMetric">
+                    <paper-icon-item id="state" data-type="state" on-tap="_createMetric">
                       <iron-icon icon="mostly:state" slot="item-icon"></iron-icon>
                       <span>[[i18n('play.metric.new.state')]]</span>
                     </paper-icon-item>
-                    <paper-icon-item id="compound" on-tap="_createMetric">
+                    <paper-icon-item id="compound" data-type="compound" on-tap="_createMetric">
                       <iron-icon icon="mostly:compound" slot="item-icon"></iron-icon>
                       <span>[[i18n('play.metric.new.compound')]]</span>
                     </paper-icon-item>
@@ -205,7 +205,7 @@ An element for managing metrics in Playing game services.
        * Got to the 'create-metric' page.
        */
       _createMetric(e) {
-        this.createdType = e.target.id;
+        this.createdType = e.target.id || 'compound'; // TODO
         this.page = 'create-metric';
       }
 
