@@ -49,6 +49,11 @@ Example:
       <img id="image" src$="[[metric.image.url]]">
     </div>
 
+    <div role="widget" hidden$="[[!metric.constraints.formula]]">
+      <label>[[i18n('play.metric.compound.constraints.formula')]]</label>
+      <div name="formula" class="multiline">[[metric.constraints.formula]]</div>
+    </div>
+
   </template>
 
   <script>
