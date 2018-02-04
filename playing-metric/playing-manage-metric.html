@@ -11,12 +11,21 @@
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-dialog.html">
 
+<link rel="import" href="playing-edit-compound.html">
+<link rel="import" href="playing-edit-point.html">
+<link rel="import" href="playing-edit-set.html">
+<link rel="import" href="playing-edit-state.html">
+<link rel="import" href="playing-view-compound.html">
+<link rel="import" href="playing-view-point.html">
+<link rel="import" href="playing-view-set.html">
+<link rel="import" href="playing-view-state.html">
+
 <!--
 An element for managing a metric.
 
 Example:
 
-    <playing-manage-metric point="Administrator"></playing-manage-metric>
+    <playing-manage-metric metric="metric"></playing-manage-metric>
 
 @group Playing Elements
 @element playing-manage-metric
@@ -24,7 +33,7 @@ Example:
 
 <dom-module id="playing-manage-metric">
   <template>
-    <style include="iron-flex iron-flex-alignment iron-flex-factors mostly-styles">
+    <style include="mostly-styles">
       :host {
         display: block;
       }

@@ -16,6 +16,10 @@ Example:
         width: 100%;
       }
 
+      *[role=widget] {
+        margin-bottom: 16px;
+      }
+
       .form-dropzone {
         width: 64px;
       }
@@ -30,7 +34,7 @@ Example:
       <paper-input name="description" label="[[i18n('play.metric.field.description')]]"
             value="{{metric.description}}" maxlength="300"
             char-counter always-float-label></paper-input>
-      <playing-dropzone name="content"
+      <playing-dropzone name="image" role="widget"
               label="[[i18n('play.metric.field.image')]]"
               document="{{metric}}" xpath="image"></playing-dropzone>
     </div>
@@ -40,7 +44,7 @@ Example:
       <template is="dom-repeat" items="{{metric.constraints.items}}" as="item">
         <div class="form-row">
           <div class="form-dropzone">
-            <playing-dropzone name="content"
+            <playing-dropzone name="itemImage"
                     label="[[i18n('play.metric.set.constraints.items.image')]]"
                     document="{{item}}" xpath="image"></playing-dropzone>
           </div>
@@ -89,7 +93,7 @@ Example:
       <paper-button noink id="addItemButton" class="primary" on-tap="_addItem">[[i18n('command.add')]]</paper-button>
     </div>
 
-    <mostly-collapse-button>
+    <mostly-collapse-button role="widget">
       <div slot="collapse-trigger">[[i18n('play.metric.advanced')]]</div>
       <div slot="collapse-content">
         <label>[[i18n('documentPage.tags')]]</label>
