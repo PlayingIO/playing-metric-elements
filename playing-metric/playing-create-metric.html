@@ -180,6 +180,7 @@
       }
 
       _goHome() {
+        this._resetFields();
         this.fire('goHome');
       }
 
@@ -222,12 +223,11 @@
       }
 
       _cancel() {
-        this._resetFields();
         this._goHome();
       }
 
       _resetFields() {
-        this.metric = {};
+        this.metric = { constraints: {} };
         this.errors = '';
       }
 
