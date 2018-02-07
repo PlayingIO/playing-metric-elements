@@ -93,21 +93,8 @@
                   auto-validate required>
           </mostly-input>
 
-          <template is="dom-if" if="[[_isEqual(type, 'point')]]">
-            <playing-edit-point id="propertyEditor" metric="{{metric}}" new></playing-edit-point>
-          </template>
-
-          <template is="dom-if" if="[[_isEqual(type, 'set')]]">
-            <playing-edit-set id="propertyEditor" metric="{{metric}}" new></playing-edit-set>
-          </template>
-
-          <template is="dom-if" if="[[_isEqual(type, 'state')]]">
-            <playing-edit-state id="propertyEditor" metric="{{metric}}" new></playing-edit-state>
-          </template>
-
-          <template is="dom-if" if="[[_isEqual(type, 'compound')]]">
-            <playing-edit-compound id="propertyEditor" metric="{{metric}}" new></playing-edit-compound>
-          </template>
+          <mostly-layout id="editorLayout" href="[[_layoutHref(type)]]"
+                  model="[[_layoutModel(metric, new)]]"></mostly-layout>
 
           <div class="form-buttons">
             <paper-button noink id="cancelButton" on-tap="_cancel">[[i18n('command.cancel')]]</paper-button>
@@ -171,6 +158,17 @@
 
       _metricHeading(type) {
         return this.i18n('play.metric.' + type + '.heading');
+      }
+
+      _layoutHref(type) {
+        return type && this.resolveUrl(`playing-edit-${type}.html`);
+      }
+
+      _layoutModel() {
+        return {
+          metric: this.metric,
+          "new": true
+        };
       }
 
       _goHome() {
