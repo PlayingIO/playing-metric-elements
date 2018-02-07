@@ -4,11 +4,12 @@
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-item/paper-icon-item.html">
-<link rel="import" href="../../paper-input/paper-input.html">
 <link rel="import" href="../../paper-listbox/paper-listbox.html">
 <link rel="import" href="../../paper-menu-button/paper-menu-button.html">
 
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-card.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-input.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-pagination-controls.html">
 
 <!--
@@ -53,37 +54,25 @@
         color: #000;
       }
 
-      .counter {
-        margin-right: 2em;
-      }
-
       h3 iron-icon {
         width: 1.3em;
         margin-right: .2rem;
       }
-
-      paper-card {
-        @apply --mostly-card;
-      }
-
     </style>
 
     <mostly-resource id="metricSearch" auto
             path="metrics"
             response="{{metrics}}"></mostly-resource>
 
-    <paper-card class="search">
-      <paper-input noink autofocus="true" value="{{searchTerm}}" type="search"
+    <mostly-card class="search">
+      <mostly-input noink autofocus="true" value="{{searchTerm}}" type="search"
               placeholder="[[i18n('play.metric.search.placeholder')]]">
         <iron-icon icon="mostly:search" prefix></iron-icon>
-      </paper-input>
-    </paper-card>
+      </mostly-input>
+    </mostly-card>
 
     <!-- metrics -->
-    <paper-card name="metrics">
-      <h3 class="title">
-        <iron-icon icon="playing:metric" prefix></iron-icon>  [[i18n('play.metric.heading')]]
-      </h3>
+    <mostly-card name="metrics" icon="playing:metric" heading="[[i18n('play.metric.heading')]]">
       <div class="fade-6">
         <p>[[i18n('play.metric.guide.search')]]
           <span class="metric-point"><i class="icon-point"></i> [[i18n('play.metric.point')]]</span>,
@@ -114,7 +103,7 @@
         </div>
       </div>
       <mostly-pagination-controls page="{{metricsCurrentPage}}" number-of-pages="[[metrics.numberOfPages]]"></mostly-pagination-controls>
-    </paper-card>
+    </mostly-card>
 
   </template>
 

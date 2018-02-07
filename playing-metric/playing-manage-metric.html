@@ -88,7 +88,7 @@ Example:
         text-decoration: underline;
       }
 
-      playing-view-point {
+      #viewer, #editor {
         margin: 2em;
       }
 
@@ -129,7 +129,7 @@ Example:
     <paper-card>
       <div class="header horizontal layout">
         <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
-        <iron-icon icon$="mostly:[[type]]" class="icon"></iron-icon>
+        <iron-icon icon$="playing:[[type]]" class="icon"></iron-icon>
         <div class="layout vertical">
           <h3 class="name">[[metric.name]]</h3>
           <h4 class="subname">[[_metricHeading(type)]]</h4>
@@ -150,8 +150,8 @@ Example:
         </div>
       </div>
 
-      <iron-pages selected="[[page]]" attr-for-selected="name">
-        <section name="viewer">
+      <iron-pages selected="[[page]]" attr-for-selected="id">
+        <section id="viewer">
           <!-- metric -->
           <template is="dom-if" if="[[_isEqual(type, 'point')]]">
             <playing-view-point id="metricViewer" metric="[[metric]]"></playing-view-point>
@@ -169,8 +169,8 @@ Example:
             <playing-view-compound id="metricViewer" metric="[[metric]]"></playing-view-compound>
           </template>
         </section>
-        <section name="editor">
-          <h2>[[i18n('play.metric.editMetric.heading')]]</h2>
+        <section id="editor">
+          <h3>[[i18n('play.metric.editMetric.heading')]]</h3>
           <iron-form id="editMetricForm">
             <form class="vertical layout">
               <template is="dom-if" if="[[_isEqual(type, 'point')]]">

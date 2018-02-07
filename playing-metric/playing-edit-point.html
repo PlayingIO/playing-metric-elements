@@ -13,7 +13,6 @@ Example:
     <style include="mostly-styles">
       :host {
         display: block;
-        width: 100%;
       }
 
       *[role=widget] {
@@ -22,9 +21,9 @@ Example:
     </style>
 
     <div class="layout vertical">
-      <paper-input name="description" label="[[i18n('play.metric.field.description')]]"
+      <mostly-input name="description" label="[[i18n('play.metric.field.description')]]"
             value="{{metric.description}}" maxlength="300"
-            char-counter always-float-label></paper-input>
+            char-counter always-float-label></mostly-input>
       <playing-dropzone name="image" role="widget"
               label="[[i18n('play.metric.field.image')]]"
               document="{{metric}}" xpath="image"></playing-dropzone>
@@ -41,18 +40,18 @@ Example:
         <label>[[i18n('play.metric.field.constraints')]]</label>
         <div class="form-row">
           <div class="flex">
-            <paper-input name="constraints.minimum" label="[[i18n('play.metric.point.constraints.minimum')]]"
-                  type="number" value="{{metric.constraints.minimum}}" always-float-label></paper-input>
+            <mostly-input name="constraints.minimum" label="[[i18n('play.metric.point.constraints.minimum')]]"
+                  type="number" value="{{metric.constraints.minimum}}" always-float-label></mostly-input>
           </div>
           <div class="flex">
-            <paper-input name="constraints.maximum" label="[[i18n('play.metric.point.constraints.maximum')]]"
-                  type="number" value="{{metric.constraints.maximum}}" always-float-label></paper-input>
+            <mostly-input name="constraints.maximum" label="[[i18n('play.metric.point.constraints.maximum')]]"
+                  type="number" value="{{metric.constraints.maximum}}" always-float-label></mostly-input>
           </div>
         </div>
         <div class="form-row">
           <div class="flex">
-            <paper-input name="constraints.default" label="[[i18n('play.metric.point.constraints.default')]]"
-                  type="number" value="{{metric.constraints.default}}" always-float-label></paper-input>
+            <mostly-input name="constraints.default" label="[[i18n('play.metric.point.constraints.default')]]"
+                  type="number" value="{{metric.constraints.default}}" always-float-label></mostly-input>
           </div>
           <div class="flex">&nbsp;</div>
         </div>

@@ -10,7 +10,7 @@ Example:
 -->
 <dom-module id="playing-view-compound">
   <template>
-    <style>
+    <style include="mostly-styles">
       :host {
         display: block;
       }
@@ -21,21 +21,6 @@ Example:
 
       label {
         @apply --mostly-label;
-      }
-
-      div.multiline {
-        white-space: pre-line;
-      }
-
-      div {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        word-break: break-word;
-        -webkit-hyphens: auto;
-        -moz-hyphens: auto;
-        -ms-hyphens: auto;
-        -o-hyphens: auto;
-        hyphens: auto;
       }
     </style>
     
