@@ -31,13 +31,16 @@
       }
 
       .header {
-        @apply --layout-horizontal;
-        @apply --layout-center;
-        margin-bottom: 16px;
+        @apply --layout-start;
+        padding: 0px;
       }
 
       .header > iron-icon {
         padding: 8px;
+      }
+
+      #form {
+        margin: 1em;
       }
 
       .form-buttons {
@@ -56,51 +59,53 @@
 
     <mostly-resource id="request" path="metrics"></mostly-resource>
 
-    <div class="header horizontal layout center">
-      <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
-      <iron-icon icon$="playing:[[type]]"></iron-icon>
-      <h3>[[_metricHeading(type)]]</h3>
-    </div>
+    <mostly-card>
+      <div class="header horizontal layout center">
+        <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
+        <iron-icon icon$="playing:[[type]]"></iron-icon>
+        <h3>[[_metricHeading(type)]]</h3>
+      </div>
 
-    <iron-form id="form">
-      <form>
-        <div class="fade-6">
-          <p>[[i18n(type, 'play.metric.guide.')]]</p>
-        </div>
-      
-        <mostly-input name="name" label="[[i18n('play.metric.field.name')]]"
-                value="{{metric.name}}" minlength="3" maxlength="20"
-                auto-validate required>
-        </mostly-input>
+      <iron-form id="form">
+        <form>
+          <div class="fade-6">
+            <p>[[i18n(type, 'play.metric.guide.')]]</p>
+          </div>
+        
+          <mostly-input name="name" label="[[i18n('play.metric.field.name')]]"
+                  value="{{metric.name}}" minlength="3" maxlength="20"
+                  auto-validate required>
+          </mostly-input>
 
-        <template is="dom-if" if="[[_isEqual(type, 'point')]]">
-          <playing-edit-point id="propertyEditor" metric="{{metric}}" new></playing-edit-point>
-        </template>
+          <template is="dom-if" if="[[_isEqual(type, 'point')]]">
+            <playing-edit-point id="propertyEditor" metric="{{metric}}" new></playing-edit-point>
+          </template>
 
-        <template is="dom-if" if="[[_isEqual(type, 'set')]]">
-          <playing-edit-set id="propertyEditor" metric="{{metric}}" new></playing-edit-set>
-        </template>
+          <template is="dom-if" if="[[_isEqual(type, 'set')]]">
+            <playing-edit-set id="propertyEditor" metric="{{metric}}" new></playing-edit-set>
+          </template>
 
-        <template is="dom-if" if="[[_isEqual(type, 'state')]]">
-          <playing-edit-state id="propertyEditor" metric="{{metric}}" new></playing-edit-state>
-        </template>
+          <template is="dom-if" if="[[_isEqual(type, 'state')]]">
+            <playing-edit-state id="propertyEditor" metric="{{metric}}" new></playing-edit-state>
+          </template>
 
-        <template is="dom-if" if="[[_isEqual(type, 'compound')]]">
-          <playing-edit-compound id="propertyEditor" metric="{{metric}}" new></playing-edit-compound>
-        </template>
+          <template is="dom-if" if="[[_isEqual(type, 'compound')]]">
+            <playing-edit-compound id="propertyEditor" metric="{{metric}}" new></playing-edit-compound>
+          </template>
 
-        <div class="form-buttons">
-          <paper-button noink id="cancelButton" on-tap="_cancel">[[i18n('command.cancel')]]</paper-button>
-          <paper-button noink id="createButton" class="primary" on-tap="_submit">[[i18n('command.create')]]</paper-button>
-          <paper-button noink id="createAnotherButton" class="primary" on-tap="_submitAnother">
-            [[i18n('play.metric.new.another')]]
-          </paper-button>
-        </div>
+          <div class="form-buttons">
+            <paper-button noink id="cancelButton" on-tap="_cancel">[[i18n('command.cancel')]]</paper-button>
+            <paper-button noink id="createButton" class="primary" on-tap="_submit">[[i18n('command.create')]]</paper-button>
+            <paper-button noink id="createAnotherButton" class="primary" on-tap="_submitAnother">
+              [[i18n('play.metric.new.another')]]
+            </paper-button>
+          </div>
 
-        <span id="errors" hidden$="[[!_hasErrors(errors)]]">[[errors]]</span>
+          <span id="errors" hidden$="[[!_hasErrors(errors)]]">[[errors]]</span>
 
-      </form>
-    </iron-form>
+        </form>
+      </iron-form>
+    </mostly-card>
 
   </template>
 

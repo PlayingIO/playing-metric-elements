@@ -1,6 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
-<link rel="import" href="../../paper-input/paper-input.html">
 <link rel="import" href="../../paper-button/paper-button.html">
 <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../paper-toast/paper-toast.html">
@@ -9,7 +8,9 @@
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-card.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-dialog.html">
+<link rel="import" href="../../mostly-elements/widgets/mostly-input.html">
 
 <link rel="import" href="playing-edit-compound.html">
 <link rel="import" href="playing-edit-point.html">
@@ -38,6 +39,10 @@ Example:
         display: block;
       }
 
+      [hidden] {
+        display: none !important;
+      }
+
       label {
         font-weight: bold;
         margin-bottom: 5px;
@@ -45,6 +50,7 @@ Example:
 
       .header {
         @apply --layout-start;
+        padding: 0px;
       }
 
       .backButton {
@@ -89,7 +95,7 @@ Example:
       }
 
       #viewer, #editor {
-        margin: 2em;
+        margin: 1em;
       }
 
       paper-dialog {
@@ -111,10 +117,6 @@ Example:
         padding: 2em;
         font-size: 1.1rem;
       }
-
-      paper-card {
-        @apply --mostly-card;
-      }
     </style>
 
     <mostly-resource id="request"
@@ -126,7 +128,7 @@ Example:
 
     <paper-toast id="toast"></paper-toast>
 
-    <paper-card>
+    <mostly-card>
       <div class="header horizontal layout">
         <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
         <iron-icon icon$="playing:[[type]]" class="icon"></iron-icon>
@@ -150,44 +152,19 @@ Example:
         </div>
       </div>
 
+      <div id="errors" hidden$="[[!errors]]">[[errors]]</div>
+
       <iron-pages selected="[[page]]" attr-for-selected="id">
         <section id="viewer">
-          <!-- metric -->
-          <template is="dom-if" if="[[_isEqual(type, 'point')]]">
-            <playing-view-point id="metricViewer" metric="[[metric]]"></playing-view-point>
-          </template>
-
-          <template is="dom-if" if="[[_isEqual(type, 'set')]]">
-            <playing-view-set id="metricViewer" metric="[[metric]]"></playing-view-set>
-          </template>
-
-          <template is="dom-if" if="[[_isEqual(type, 'state')]]">
-            <playing-view-state id="metricViewer" metric="[[metric]]"></playing-view-state>
-          </template>
-
-          <template is="dom-if" if="[[_isEqual(type, 'compound')]]">
-            <playing-view-compound id="metricViewer" metric="[[metric]]"></playing-view-compound>
-          </template>
+          <mostly-layout id="viewerLayout" href="[[_layoutHref(type, 'view')]]"
+                model="[[_layoutModel(metric, new)]]"></mostly-layout>
         </section>
         <section id="editor">
           <h3>[[i18n('play.metric.editMetric.heading')]]</h3>
           <iron-form id="editMetricForm">
             <form class="vertical layout">
-              <template is="dom-if" if="[[_isEqual(type, 'point')]]">
-                <playing-edit-point id="metricEditor" metric="[[metric]]"></playing-edit-point>
-              </template>
-
-              <template is="dom-if" if="[[_isEqual(type, 'set')]]">
-                <playing-edit-set id="metricEditor" metric="[[metric]]"></playing-edit-set>
-              </template>
-
-              <template is="dom-if" if="[[_isEqual(type, 'state')]]">
-                <playing-edit-state id="metricEditor" metric="[[metric]]"></playing-edit-state>
-              </template>
-
-              <template is="dom-if" if="[[_isEqual(type, 'compound')]]">
-                <playing-edit-compound id="metricEditor" metric="[[metric]]"></playing-edit-compound>
-              </template>
+              <mostly-layout id="editorLayout" href="[[_layoutHref(type, 'edit')]]"
+                  model="[[_layoutModel(metric, new)]]"></mostly-layout>
             </form>
           </iron-form>
           <div class="horizontal end-justified layout">
@@ -199,7 +176,7 @@ Example:
             </paper-button>
           </div>
         </section>
-    </paper-card>
+    </mostly-card>
 
     <mostly-dialog id="deleteMetricDialog" with-backdrop>
       <h2>[[i18n('play.metric.delete.confirm')]]</h2>
@@ -283,6 +260,17 @@ Example:
 
       _metricHeading(type) {
         return this.i18n('play.metric.' + type + '.heading');
+      }
+
+      _layoutHref(type, layout) {
+        return type && this.resolveUrl(`playing-${layout}-${type}.html`);
+      }
+
+      _layoutModel() {
+        return {
+          metric: this.metric,
+          "new": true
+        };
       }
 
       _toggleDialog(e) {

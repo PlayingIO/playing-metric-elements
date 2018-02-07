@@ -137,7 +137,10 @@ Example:
       }
 
       _empty() {
-        return !(this.metric.constraints && this.metric.constraints.states && this.metric.constraints.states.length >= 0);
+        return !(this.metric
+          && this.metric.constraints
+          && this.metric.constraints.states
+          && this.metric.constraints.states.length >= 0);
       }
     }
 
