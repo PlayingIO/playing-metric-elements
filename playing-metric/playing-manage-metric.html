@@ -5,6 +5,7 @@
 <link rel="import" href="../../paper-toast/paper-toast.html">
 
 <link rel="import" href="../../mostly-elements/behaviors/mostly-filters-behavior.html">
+<link rel="import" href="../../mostly-elements/behaviors/mostly-func-behavior.html">
 <link rel="import" href="../../mostly-elements/behaviors/mostly-i18n-behavior.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
@@ -192,7 +193,7 @@ Example:
 
   <script>
     class PlayingManageMetric extends Polymer.mixinBehaviors(
-        [Mostly.I18nBehavior, Mostly.FiltersBehavior], Polymer.Element) {
+        [Mostly.I18nBehavior, Mostly.FiltersBehavior, Mostly.FuncBehavior], Polymer.Element) {
 
       static get is() { return 'playing-manage-metric' };
 
@@ -207,10 +208,18 @@ Example:
             notify: true
           },
 
+          /**
+           * the current metric
+           */
           metric: {
             type: Object,
             observer: '_fetch'
           },
+
+          /**
+           * original metric object
+           */
+          origMetric: Object,
 
           type: String,
 
@@ -246,6 +255,7 @@ Example:
         if (typeof this.metric === 'string') {
           this.$.request.get().then((response) => {
             this.metric = response.data;
+            this.origMetric = this.fp.clone(this.metric);
           });
         }
       }
@@ -278,10 +288,15 @@ Example:
       }
 
       _toggleEditMetric() {
-        this.page = (this.page === 'viewer')? 'editor' : 'viewer';
+        if (this.page === 'viewer') {
+          this.page = 'editor';
+        } else {
+          this._cancelEditMetric();
+        }
       }
 
       _cancelEditMetric() {
+        this.set('metric', this.fp.clone(this.origMetric));
         this.page = 'viewer';
       }
 
