@@ -12,6 +12,7 @@
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-connection.html">
 <link rel="import" href="../../mostly-elements/mostly-common/mostly-resource.html">
 <link rel="import" href="../../mostly-elements/widgets/mostly-input.html">
+<link rel="import" href="../../playing-elements/playing-styles.html">
 
 <link rel="import" href="playing-edit-compound.html">
 <link rel="import" href="playing-edit-point.html">
@@ -25,7 +26,7 @@
 -->
 <dom-module id="playing-create-metric">
   <template>
-    <style include="mostly-styles">
+    <style include="mostly-styles playing-styles">
       :host {
         display: block;
       }
@@ -58,10 +59,6 @@
 
       .form-buttons {
         color: var(--mostly-button-primary, #00adff);
-      }
-
-      .fade-6 {
-        opacity: 0.6;
       }
 
       #errors {
