@@ -40,6 +40,7 @@ Example:
 
     <div class="layout vertical">
       <label>[[i18n('play.metric.set.constraints.items.heading')]]</label>
+
       <template is="dom-repeat" items="{{metric.constraints.items}}" as="item">
         <div class="form-row">
           <div class="form-dropzone">
@@ -81,11 +82,13 @@ Example:
           </div>
         </div>
       </template>
-      <template is="dom-if" if=[[_empty(metric.constraints.items.*)]]>
+
+      <template is="dom-if" if=[[!metric.constraints.items.length]]>
         <div class="form-row">
           <div class="empty-result">[[i18n('play.metric.set.constraints.items.empty')]]</div>
         </div>
       </template>
+
     </div>
 
     <div class="form-buttons">
