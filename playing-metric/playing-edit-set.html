@@ -172,13 +172,6 @@ Example:
       _resultFormatter(item) {
         return item.name;
       }
-
-      _empty() {
-        return !(this.metric
-          && this.metric.constraints
-          && this.metric.constraints.items
-          && this.metric.constraints.items.length >= 0);
-      }
     }
 
     customElements.define(PlayingEditSet.is, PlayingEditSet);
