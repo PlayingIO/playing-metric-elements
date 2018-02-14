@@ -73,7 +73,7 @@
               <div class="flex-4">[[item.description]]</div>
             </div>
           </template>
-          <template is="dom-if" if=[[_empty(metrics.data)]]>
+          <template is="dom-if" if=[[!metrics.data.length]]>
             <div class="table-row">
               <div class="empty-result">[[i18n('play.metric.search.empty')]]</div>
             </div>
@@ -137,10 +137,6 @@
 
       _manageMetric(e) {
         this.fire('manageMetric', { metric: e.model.item });
-      }
-
-      _empty(entries) {
-        return entries && entries.length === 0;
       }
 
     }
