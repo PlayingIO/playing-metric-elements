@@ -1,0 +1,34 @@
+<link rel="import" href="../../mostly-elements/behaviors/mostly-func-behavior.html">
+
+<script>
+  var Playing = Playing || {};
+
+  /**
+   * @polymerBehavior Playing.MetricBehavior
+   */
+  Playing.MetricBehavior = [Mostly.FuncBehavior, {
+
+    properties: {
+      
+    },
+
+    metricPath(type, metric) {
+      if (metric && metric.type && metric.id) {
+        return metric.type + 's/' + metric.id;
+      } else {
+        return type + 's/' + metric;
+      }
+    },
+
+    layoutHref(layout) {
+      return layout && this.resolveUrl(`playing-${layout}-metric.html`);
+    },
+
+    layoutModel() {
+      return {
+        metric: this.metric,
+        "new": true
+      };
+    }
+  }];
+</script>
