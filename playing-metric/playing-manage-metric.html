@@ -129,7 +129,7 @@ Example:
         <iron-icon icon$="playing:[[type]]" class="icon"></iron-icon>
         <div class="layout vertical">
           <h3 class="name">[[metric.name]]</h3>
-          <h4 class="subname">[[_metricHeading(type)]]</h4>
+          <h4 class="subname">[[metricHeading(type)]]</h4>
         </div>
 
         <div class="actions">
@@ -219,7 +219,7 @@ Example:
 
           path: {
             type: String,
-            computed: '_metricPath(type, metric)'
+            computed: 'metricPath(type, metric)'
           },
 
           empty: Boolean,
@@ -252,18 +252,6 @@ Example:
             this.origMetric = this.fp.clone(this.metric);
           });
         }
-      }
-
-      _metricPath(type, metric) {
-        if (metric && metric.type && metric.id) {
-          return metric.type + 's/' + metric.id;
-        } else {
-          return type + 's/' + metric;
-        }
-      }
-
-      _metricHeading(type) {
-        return this.i18n('play.metric.' + type + '.heading');
       }
 
       _toggleDialog(e) {

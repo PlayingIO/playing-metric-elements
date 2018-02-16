@@ -12,6 +12,10 @@
       
     },
 
+    metricHeading(type) {
+      return this.i18n('play.metric.' + type + '.heading');
+    },
+
     metricPath(type, metric) {
       if (metric && metric.type && metric.id) {
         return metric.type + 's/' + metric.id;

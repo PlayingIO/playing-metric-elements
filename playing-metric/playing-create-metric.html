@@ -71,7 +71,7 @@
         <paper-icon-button class="backButton" icon="icons:arrow-back" on-tap="_goHome"></paper-icon-button>
         <iron-icon icon$="playing:[[type]]" class="icon"></iron-icon>
         <div class="layout vertical">
-          <h3 class="name">[[_metricHeading(type)]]</h3>
+          <h3 class="name">[[metricHeading(type)]]</h3>
           <h4 class="subname">[[i18n('play.metric.new')]]</h4>
         </div>
       </div>
@@ -149,10 +149,6 @@
           event.preventDefault();
           this._create();
         });
-      }
-
-      _metricHeading(type) {
-        return this.i18n('play.metric.' + type + '.heading');
       }
 
       _goHome() {
