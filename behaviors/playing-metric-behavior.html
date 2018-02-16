@@ -20,8 +20,8 @@
       }
     },
 
-    layoutHref(type) {
-      return type && this.resolveUrl(`playing-edit-${type}.html`);
+    layoutHref(type, layout) {
+      return type && this.resolveUrl(`playing-${layout}-${type}.html`);
     },
 
     layoutModel() {
