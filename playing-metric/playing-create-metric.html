@@ -98,7 +98,7 @@
             </paper-button>
           </div>
 
-          <span id="errors" hidden$="[[!_hasErrors(errors)]]">[[errors]]</span>
+          <span id="errors" hidden$="[[!hasErrors(errors)]]">[[errors]]</span>
 
         </form>
       </iron-form>
@@ -121,7 +121,9 @@
 
           metric: {
             type: Object,
-            value: () => { return { constraints: {} } }
+            value() {
+              return this.emptyMetric();
+            }
           },
 
           errors: {
@@ -152,7 +154,7 @@
       }
 
       _goHome() {
-        this._resetFields();
+        this.resetFields();
         this.fire('goHome');
       }
 
@@ -177,7 +179,7 @@
        */
       _create() {
         this._doCreate(this.metric).then((metric) => {
-          this._resetFields();
+          this.resetFields();
           if (!this._createAnother) {
             this._goHome();
           }
@@ -196,15 +198,6 @@
 
       _cancel() {
         this._goHome();
-      }
-
-      _resetFields() {
-        this.metric = { constraints: {} };
-        this.errors = '';
-      }
-
-      _hasErrors() {
-        return this.errors !== '';
       }
     }
 

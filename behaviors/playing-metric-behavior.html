@@ -33,6 +33,19 @@
         metric: this.metric,
         "new": true
       };
+    },
+
+    emptyMetric() {
+      return { constraints: {} };
+    },
+
+    resetFields() {
+      this.metric = this.emptyMetric();
+      this.errors = '';
+    },
+
+    hasErrors() {
+      return this.errors !== '';
     }
   }];
 </script>
