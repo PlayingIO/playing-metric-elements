@@ -13,6 +13,8 @@
 <link rel="import" href="../../mostly-elements/widgets/mostly-pagination-controls.html">
 <link rel="import" href="../../playing-elements/playing-styles.html">
 
+<link rel="import" href="../behaviors/playing-metric-behavior.html">
+
 <!--
 `playing-metric-search`
 @group Playing Elements
@@ -86,7 +88,8 @@
   </template>
 
   <script>
-    class PlayingMetricSearch extends Polymer.mixinBehaviors([Mostly.I18nBehavior], Polymer.Element) {
+    class PlayingMetricSearch extends Polymer.mixinBehaviors(
+        [Mostly.I18nBehavior, Playing.MetricBehavior], Polymer.Element) {
 
       static get is() { return 'playing-metric-search' };
 

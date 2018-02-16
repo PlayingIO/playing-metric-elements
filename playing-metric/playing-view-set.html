@@ -1,3 +1,5 @@
+<link rel="import" href="../behaviors/playing-metric-behavior.html">
+
 <!--
 An element for displaying point metric data.
 
@@ -75,7 +77,8 @@ Example:
   </template>
 
   <script>
-    class PlayingViewSet extends Polymer.mixinBehaviors([Mostly.I18nBehavior], Polymer.Element) {
+    class PlayingViewSet extends Polymer.mixinBehaviors(
+        [Mostly.I18nBehavior, Playing.MetricBehavior], Polymer.Element) {
 
       static get is() { return 'playing-view-set' };
 

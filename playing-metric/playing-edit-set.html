@@ -1,3 +1,5 @@
+<link rel="import" href="../behaviors/playing-metric-behavior.html">
+
 <!--
 An element for creating and editing set metric data.
 
@@ -117,7 +119,8 @@ Example:
   </template>
 
   <script>
-    class PlayingEditSet extends Polymer.mixinBehaviors([Mostly.I18nBehavior], Polymer.Element) {
+    class PlayingEditSet extends Polymer.mixinBehaviors(
+        [Mostly.I18nBehavior, Playing.MetricBehavior], Polymer.Element) {
 
       static get is() { return 'playing-edit-set' };
 

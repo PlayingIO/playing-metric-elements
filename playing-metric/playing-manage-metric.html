@@ -14,14 +14,7 @@
 <link rel="import" href="../../mostly-elements/widgets/mostly-input.html">
 <link rel="import" href="../../playing-elements/playing-styles.html">
 
-<link rel="import" href="playing-edit-compound.html">
-<link rel="import" href="playing-edit-point.html">
-<link rel="import" href="playing-edit-set.html">
-<link rel="import" href="playing-edit-state.html">
-<link rel="import" href="playing-view-compound.html">
-<link rel="import" href="playing-view-point.html">
-<link rel="import" href="playing-view-set.html">
-<link rel="import" href="playing-view-state.html">
+<link rel="import" href="../behaviors/playing-metric-behavior.html">
 
 <!--
 An element for managing a metric.
@@ -158,15 +151,15 @@ Example:
 
       <iron-pages selected="[[page]]" attr-for-selected="id">
         <section id="viewer">
-          <mostly-layout id="viewerLayout" href="[[_layoutHref(type, 'view')]]"
-                model="[[_layoutModel(metric, new)]]"></mostly-layout>
+          <mostly-layout id="viewerLayout" href="[[layoutHref(type, 'view')]]"
+                model="[[layoutModel(metric, new)]]"></mostly-layout>
         </section>
         <section id="editor">
           <h3>[[i18n('play.metric.editMetric.heading')]]</h3>
           <iron-form id="editMetricForm">
             <form class="vertical layout">
-              <mostly-layout id="editorLayout" href="[[_layoutHref(type, 'edit')]]"
-                  model="[[_layoutModel(metric, new)]]"></mostly-layout>
+              <mostly-layout id="editorLayout" href="[[layoutHref(type, 'edit')]]"
+                  model="[[layoutModel(metric, new)]]"></mostly-layout>
             </form>
           </iron-form>
           <div class="horizontal end-justified layout">
@@ -194,7 +187,7 @@ Example:
 
   <script>
     class PlayingManageMetric extends Polymer.mixinBehaviors(
-        [Mostly.I18nBehavior, Mostly.FiltersBehavior, Mostly.FuncBehavior], Polymer.Element) {
+        [Mostly.I18nBehavior, Mostly.FiltersBehavior, Playing.MetricBehavior], Polymer.Element) {
 
       static get is() { return 'playing-manage-metric' };
 
@@ -271,17 +264,6 @@ Example:
 
       _metricHeading(type) {
         return this.i18n('play.metric.' + type + '.heading');
-      }
-
-      _layoutHref(type, layout) {
-        return type && this.resolveUrl(`playing-${layout}-${type}.html`);
-      }
-
-      _layoutModel() {
-        return {
-          metric: this.metric,
-          "new": true
-        };
       }
 
       _toggleDialog(e) {
