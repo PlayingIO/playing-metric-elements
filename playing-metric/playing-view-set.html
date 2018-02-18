@@ -61,14 +61,12 @@ Example:
     </div>
 
     <div role="widget">
-      <label>[[i18n('play.metric.field.constraints')]]</label>
+      <label role="widget">[[i18n('play.metric.field.constraints')]]</label>
       <div class="table">
-        <div class="table-header">
-          <div class="flex">[[i18n('play.metric.set.constraints.maxItems')]]</div>
-        </div>
         <div class="table-rows">
           <div class="table-row">
-            <div class="flex">[[metric.constraints.maxItems]]</div>
+            <div class="flex-1">[[i18n('play.metric.set.constraints.maxItems')]]</div>
+            <div class="flex-2">[[metric.constraints.maxItems]]</div>
           </div>
         </div>
       </div>

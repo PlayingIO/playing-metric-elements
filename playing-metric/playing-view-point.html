@@ -37,18 +37,24 @@ Example:
     </div>
 
     <div role="widget">
-      <label>[[i18n('play.metric.field.constraints')]]</label>
+      <label role="widget">[[i18n('play.metric.field.constraints')]]</label>
       <div class="table">
-        <div class="table-header">
-          <div class="flex">[[i18n('play.metric.point.constraints.minimum')]]</div>
-          <div class="flex">[[i18n('play.metric.point.constraints.maximum')]]</div>
-          <div class="flex">[[i18n('play.metric.point.constraints.default')]]</div>
+        <div class="table-rows">
+          <div class="table-row">
+            <div class="flex-1">[[i18n('play.metric.point.constraints.minimum')]]</div>
+            <div class="flex-2">[[metric.constraints.minimum]]</div>
+          </div>
         </div>
         <div class="table-rows">
           <div class="table-row">
-            <div class="flex">[[metric.constraints.minimum]]</div>
-            <div class="flex">[[metric.constraints.maximum]]</div>
-            <div class="flex">[[metric.constraints.default]]</div>
+            <div class="flex-1">[[i18n('play.metric.point.constraints.maximum')]]</div>
+            <div class="flex-2">[[metric.constraints.maximum]]</div>
+          </div>
+        </div>
+        <div class="table-rows">
+          <div class="table-row">
+            <div class="flex-1">[[i18n('play.metric.point.constraints.default')]]</div>
+            <div class="flex-2">[[metric.constraints.default]]</div>
           </div>
         </div>
       </div>
