@@ -38,9 +38,8 @@
       }
     </style>
 
-    <mostly-resource id="metricSearch" auto
-            path="metrics"
-            response="{{metrics}}"></mostly-resource>
+    <mostly-resource id="searchRequest" path="metrics"
+            response="{{metrics}}" auto></mostly-resource>
 
     <mostly-card class="search">
       <mostly-input noink autofocus="true" value="{{searchTerm}}" type="search"
@@ -66,7 +65,7 @@
           <div class="flex-4">[[i18n('play.metric.field.description')]]</div>
         </div>
         <div class="table-rows">
-          <template is="dom-repeat" items="[[metrics.data]]" as="item">
+          <template is="dom-repeat" items="[[metrics]]" as="item">
             <div class="table-row" on-tap="_manageMetric">
               <div class="flex-2">[[item.name]]</div>
               <div class="flex-1"><span class$="metric-[[item.type]]">
@@ -75,14 +74,14 @@
               <div class="flex-4">[[item.description]]</div>
             </div>
           </template>
-          <template is="dom-if" if=[[!metrics.data.length]]>
+          <template is="dom-if" if=[[!metrics.length]]>
             <div class="table-row">
               <div class="empty-result">[[i18n('play.metric.search.empty')]]</div>
             </div>
           </template>
         </div>
       </div>
-      <mostly-pagination-controls page="{{metricsCurrentPage}}" number-of-pages="[[metrics.numberOfPages]]"></mostly-pagination-controls>
+      <mostly-pagination-controls page="{{currentPage}}" number-of-pages="[[metrics.numberOfPages]]"></mostly-pagination-controls>
     </mostly-card>
 
   </template>
@@ -104,7 +103,7 @@
 
           metrics: Object,
 
-          metricsCurrentPage: {
+          currentPage: {
             type: Number,
             value: 1
           },
@@ -118,24 +117,24 @@
 
       static get observers() {
         return [
-          '_searchMetrics(metricsCurrentPage)'
+          '_searchMetrics(currentPage)'
         ];
       }
 
       _searchTermChanged() {
-        this.metricsCurrentPage = 1;
+        this.currentPage = 1;
         this.currentPageSize = 10;
         this._searchMetrics();
       }
 
       _searchMetrics() {
         var params = {
-          '$skip': (this.metricsCurrentPage - 1) * this.currentPageSize
+          '$skip': (this.currentPage - 1) * this.currentPageSize
         };
         if (this.searchTerm) {
           params['name[$like]'] = this.searchTerm;
         }
-        this.$.metricSearch.params = params;
+        this.$.searchRequest.params = params;
       }
 
       _manageMetric(e) {
