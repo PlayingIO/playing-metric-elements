@@ -178,11 +178,13 @@ An element for managing metrics in Playing game services.
       _entityChanged() {
         if (!this.visible) return;
         if (this.entity && this.entity.id && this.entity.type) {
-          this.selectedMetric = null;
-          this.selectedType = null;
-          this.selectedMetric = this.entity.id;
-          this.selectedType = this.entity.type;
-          this.page = 'manage-metric';
+          if (this.entity.route === 'metric-management') {
+            this.selectedMetric = null;
+            this.selectedType = null;
+            this.selectedMetric = this.entity.id;
+            this.selectedType = this.entity.type;
+            this.page = 'manage-metric';
+          }
         } else {
           this.$$('playing-metric-search')._searchTermChanged();
         }
