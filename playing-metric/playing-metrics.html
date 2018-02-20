@@ -99,8 +99,8 @@ An element for managing metrics in Playing game services.
 
           <section name="manage-metric">
             <playing-manage-metric id="metricManager"
-                    metric="[[selectedMetric.id]]"
-                    type="[[selectedMetric.type]]"
+                    metric="[[selectedMetric]]"
+                    type="[[selectedType]]"
                     readonly$="[[readonly]]"></playing-manage-metric>
           </section>
         </iron-pages>
@@ -116,6 +116,11 @@ An element for managing metrics in Playing game services.
 
       static get properties() {
         return {
+          visible: {
+            type: Boolean,
+            observer: '_visibleChanged'
+          },
+
           /**
            * The metric manage page to be displayed.
            */
@@ -125,10 +130,23 @@ An element for managing metrics in Playing game services.
             notify: true
           },
 
+          entity: {
+            type: Object,
+            value: {},
+            observer: '_entityChanged'
+          },
+
           /**
-           * Selected metric.
+           * Selected metric id.
            */
-          selectedMetric: Object,
+          selectedMetric: {
+            type: String
+          },
+
+          /**
+           * Type of selected metric
+           */
+          selectedType: String,
 
           /**
            * Type of created metric
@@ -157,6 +175,27 @@ An element for managing metrics in Playing game services.
         this.addEventListener('manageMetric', this._manageMetric);
       }
 
+      _entityChanged() {
+        if (!this.visible) return;
+        if (this.entity && this.entity.id && this.entity.type) {
+          this.selectedMetric = null;
+          this.selectedType = null;
+          this.selectedMetric = this.entity.id;
+          this.selectedType = this.entity.type;
+          this.page = 'manage-metric';
+        } else {
+          this.$$('playing-metric-search')._searchTermChanged();
+        }
+      }
+
+      _visibleChanged() {
+        if (this.visible) {
+          this.async(() => {
+            this._entityChanged();
+          });
+        }
+      }
+
       /**
        * Go to the 'search' page.
        */
@@ -177,9 +216,8 @@ An element for managing metrics in Playing game services.
       }
 
       _manageMetric(e) {
-        this.selectedMetric = null;
-        this.selectedMetric = e.detail.metric;
-        this.page = 'manage-metric';
+        var url = 'metric-management/' + e.detail.type + '/' + e.detail.metric;
+        this.navigateTo('play', url);
       }
 
       _hasAdministrationPermissions(user) {

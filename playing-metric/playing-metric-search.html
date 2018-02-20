@@ -138,7 +138,7 @@
       }
 
       _manageMetric(e) {
-        this.fire('manageMetric', { metric: e.model.item });
+        this.fire('manageMetric', { type: e.model.item.type, metric: e.model.item.id });
       }
 
     }
