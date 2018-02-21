@@ -17,17 +17,8 @@ Example:
         display: block;
       }
 
-      *[role=widget] {
-        margin-bottom: 16px;
-      }
-
       .form-dropzone {
         width: 64px;
-      }
-
-      .form-buttons {
-        padding: 1em;
-        margin: 5px -0.7rem 0;
       }
     </style>
 
@@ -41,7 +32,12 @@ Example:
     </div>
 
     <div class="layout vertical">
-      <label>[[i18n('play.metric.set.constraints.items.heading')]]</label>
+      <div class="layout horizontal center">
+        <h3 class="flex">[[i18n('play.metric.set.constraints.items.heading')]]</h3>
+        <paper-button noink id="addItem" class="flex-end" on-tap="_addItem">
+          <iron-icon icon="mostly:add"></iron-icon> [[i18n('play.metric.set.constraints.items.create')]]
+        </paper-button>
+      </div>
 
       <template is="dom-repeat" items="{{metric.constraints.items}}" as="item">
         <div class="form-row">
@@ -93,9 +89,6 @@ Example:
 
     </div>
 
-    <div role="widget" class="form-buttons">
-      <paper-button noink id="addItemButton" class="primary" on-tap="_addItem">[[i18n('command.add')]]</paper-button>
-    </div>
 
     <mostly-collapse-button role="widget">
       <div slot="collapse-trigger">[[i18n('play.metric.advanced')]]</div>
