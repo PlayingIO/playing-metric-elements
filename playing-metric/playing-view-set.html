@@ -16,18 +16,6 @@ Example:
       :host {
         display: block;
       }
-
-      *[role=widget] {
-        margin-bottom: 16px;
-      }
-
-      label {
-        @apply --mostly-label;
-      }
-
-      div.multiline {
-        white-space: pre-line;
-      }
     </style>
     
     <div role="widget" hidden$="[[!metric.description]]">
@@ -44,14 +32,16 @@ Example:
       <label>[[i18n('play.metric.set.constraints.items')]]</label>
       <div class="table">
         <div class="table-header">
-          <div class="flex-4">[[i18n('play.metric.set.constraints.items.name')]]</div>
+          <div class="flex-1">[[i18n('play.metric.set.constraints.items.name')]]</div>
+          <div class="flex-2">[[i18n('play.metric.set.constraints.items.description')]]</div>
           <div class="flex-1">[[i18n('play.metric.set.constraints.items.maximum')]]</div>
           <div class="flex-1">[[i18n('play.metric.set.constraints.items.hidden')]]</div>
         </div>
         <div class="table-rows">
           <template is="dom-repeat" items="[[metric.constraints.items]]" as="item">
             <div class="table-row">
-              <div class="flex-4">[[item.name]]</div>
+              <div class="flex-1">[[item.name]]</div>
+              <div class="flex-2">[[item.description]]</div>
               <div class="flex-1">[[item.maximum]]</div>
               <div class="flex-1">[[item.hidden]]</div>
             </div>

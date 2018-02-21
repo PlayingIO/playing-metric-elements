@@ -16,14 +16,6 @@ Example:
       :host {
         display: block;
       }
-
-      *[role=widget] {
-        margin-bottom: 16px;
-      }
-
-      label {
-        @apply --mostly-label;
-      }
     </style>
     
     <div role="widget" hidden$="[[!metric.description]]">
@@ -40,12 +32,14 @@ Example:
       <label>[[i18n('play.metric.state.constraints.states')]]</label>
       <div class="table">
         <div class="table-header">
-          <div class="flex-4">[[i18n('play.metric.state.constraints.states.name')]]</div>
+          <div class="flex-1">[[i18n('play.metric.state.constraints.states.name')]]</div>
+          <div class="flex-2">[[i18n('play.metric.state.constraints.states.description')]]</div>
         </div>
         <div class="table-rows">
           <template is="dom-repeat" items="[[metric.constraints.states]]" as="item">
             <div class="table-row">
-              <div class="flex-4">[[item.name]]</div>
+              <div class="flex-1">[[item.name]]</div>
+              <div class="flex-2">[[item.description]]</div>
             </div>
           </template>
         </div>
