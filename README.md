@@ -1,7 +1,7 @@
-Playing Game metric Web Components
-==================================
+Playing Game Metrics Web Components
+===================================
 
-Game metric management web components for playful applications.
+Game metrics management web components for playful applications.
 
 # Usage
 

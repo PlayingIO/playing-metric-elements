@@ -1,6 +1,6 @@
 {
   "name": "playing-metric-elements",
-  "description": "Game metric management web components for playful applications",
+  "description": "Game metrics management web components for playful applications",
   "version": "1.0.3",
   "license": "MIT",
   "devDependencies": {
